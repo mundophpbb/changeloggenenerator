@@ -1,0 +1,317 @@
+/*
+ * Public changelog pages.
+ * Follows the prosilver #page-body width and palette; buttons are flat and keep
+ * the same look on hover, focus and click.
+ */
+.mphpbb-cl-public {
+	--cl-ink: #333333;
+	--cl-heading: #28313F;
+	--cl-accent: #115098;
+	--cl-link: #105289;
+	--cl-brand: #0076B1;
+	--cl-muted: #536482;
+	--cl-line: #CCCCCC;
+	--cl-line-soft: #DCE3E8;
+	--cl-control-line: #B4BAC0;
+	--cl-panel: #ECF1F3;
+	--cl-tint: #ECF3F7;
+	--cl-tint-alt: #E1EBF2;
+	--cl-tint-strong: #CADCEB;
+	--cl-surface: #FFFFFF;
+	--cl-success: #228822;
+	--cl-success-bg: #E6F2E6;
+	--cl-error: #BC2A4D;
+	--cl-error-bg: #F7ECEF;
+	--cl-radius: 7px;
+	box-sizing: border-box;
+	width: 100%;
+	margin: 0 0 10px;
+	color: var(--cl-ink);
+	font-size: 1.1em;
+	line-height: 1.45;
+	overflow-wrap: anywhere;
+}
+
+.mphpbb-cl-public *,
+.mphpbb-cl-public *::before,
+.mphpbb-cl-public *::after { box-sizing: border-box; }
+
+.mphpbb-cl-public :is(h2, h3, h4) {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-family: inherit;
+	text-transform: none;
+	letter-spacing: normal;
+}
+
+.mphpbb-cl-public a { color: var(--cl-link); }
+.mphpbb-cl-public p { margin: 0; }
+
+/* ---------------------------------------------------------------- header */
+.mphpbb-cl-public .cl-public-header {
+	margin: 0 0 12px;
+	padding: 16px 18px;
+	border-radius: var(--cl-radius);
+	background: var(--cl-panel);
+	color: var(--cl-heading);
+}
+
+.mphpbb-cl-public .cl-heading { display: flex; align-items: center; flex-wrap: wrap; gap: 14px; }
+.mphpbb-cl-public .cl-heading-text { flex: 1 1 260px; min-width: 0; }
+.mphpbb-cl-public .cl-heading h2 { color: var(--cl-heading); font-size: 2em; font-weight: 700; line-height: 1.2; }
+.mphpbb-cl-public .cl-heading p { margin-top: 3px; color: var(--cl-muted); font-size: 1.05em; }
+.mphpbb-cl-public .cl-back { display: inline-flex; align-items: center; margin-bottom: 4px; font-weight: 700; text-decoration: none; }
+
+.mphpbb-cl-public .cl-initial {
+	display: inline-flex;
+	flex: none;
+	align-items: center;
+	justify-content: center;
+	width: 52px;
+	height: 52px;
+	border-radius: var(--cl-radius);
+	background: var(--cl-link);
+	color: #FFFFFF;
+	font-size: 1.7em;
+	font-weight: 700;
+	line-height: 1;
+}
+
+.mphpbb-cl-public .cl-initial-icon { background: var(--cl-brand); }
+.mphpbb-cl-public .cl-initial-icon .icon { font-size: 28px; }
+.mphpbb-cl-public .cl-heading > .cl-initial { width: 60px; height: 60px; font-size: 2em; }
+
+.mphpbb-cl-public .cl-stats {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr));
+	gap: 10px;
+	margin: 14px 0 0;
+}
+
+.mphpbb-cl-public .cl-stats > div { padding: 9px 13px; border: 1px solid var(--cl-line-soft); border-radius: var(--cl-radius); background: var(--cl-surface); }
+.mphpbb-cl-public .cl-stats :is(dt, dd) { float: none; width: auto; margin: 0; }
+.mphpbb-cl-public .cl-stats dt { display: block; color: var(--cl-muted); font-size: 0.85em; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; }
+.mphpbb-cl-public .cl-stats dd { margin-top: 3px; color: var(--cl-accent); font-size: 1.45em; font-weight: 700; line-height: 1.25; }
+.mphpbb-cl-public .cl-stats dd.cl-stat-text { font-size: 1.1em; }
+
+/* ---------------------------------------------------------------- buttons and links */
+.mphpbb-cl-public .cl-links { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.mphpbb-cl-public .cl-links li { margin: 0; list-style: none; }
+
+.mphpbb-cl-public .cl-button,
+.mphpbb-cl-public .cl-button:is(:hover, :focus, :active, :link, :visited) {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 5px;
+	width: auto;
+	max-width: 100%;
+	min-height: 34px;
+	margin: 0;
+	padding: 5px 13px;
+	border: 1px solid var(--cl-control-line);
+	border-radius: 4px;
+	background: var(--cl-surface);
+	background-image: none;
+	color: var(--cl-link);
+	font-family: inherit;
+	font-size: 1em;
+	font-weight: 700;
+	line-height: 1.35;
+	text-align: center;
+	text-decoration: none;
+	text-shadow: none;
+	white-space: normal;
+	box-shadow: none;
+	outline: none;
+	transition: none;
+	transform: none;
+	filter: none;
+	cursor: pointer;
+}
+
+.mphpbb-cl-public .cl-button-primary,
+.mphpbb-cl-public .cl-button-primary:is(:hover, :focus, :active, :link, :visited) {
+	border-color: var(--cl-link);
+	background: var(--cl-link);
+	color: #FFFFFF;
+}
+
+.mphpbb-cl-public .cl-button-quiet,
+.mphpbb-cl-public .cl-button-quiet:is(:hover, :focus, :active, :link, :visited) { border-color: transparent; background: transparent; }
+.mphpbb-cl-public :is(a, button, input):focus-visible { outline: 2px solid #11A3EA; outline-offset: 2px; }
+
+/* ---------------------------------------------------------------- search */
+.mphpbb-cl-public .cl-toolbar {
+	margin: 0 0 12px;
+	padding: 12px 16px;
+	border-radius: var(--cl-radius);
+	background: var(--cl-panel);
+}
+
+.mphpbb-cl-public .cl-toolbar label { display: block; margin-bottom: 6px; color: var(--cl-heading); font-weight: 700; }
+.mphpbb-cl-public .cl-search-fields { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.mphpbb-cl-public .cl-search-box { position: relative; display: block; flex: 1 1 16em; max-width: 34em; min-width: 0; }
+.mphpbb-cl-public .cl-search-box > .icon { position: absolute; top: 50%; left: 10px; margin-top: -0.5em; color: var(--cl-muted); line-height: 1; pointer-events: none; }
+.mphpbb-cl-public .cl-search-box .inputbox {
+	-webkit-appearance: none;
+	appearance: none;
+	box-sizing: border-box;
+	width: 100%;
+	height: 36px;
+	max-width: none;
+	min-height: 36px;
+	margin: 0;
+	padding: 6px 10px 6px 32px;
+	border-width: 1px;
+	border-style: solid;
+	border-radius: 4px;
+	font: inherit;
+}
+
+.mphpbb-cl-public .cl-search-box [aria-invalid=true] { border-color: var(--cl-error); }
+
+/* ---------------------------------------------------------------- catalogue */
+.mphpbb-cl-public .cl-public-products {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+	gap: 10px;
+	margin: 0 0 12px;
+	padding: 0;
+	list-style: none;
+}
+
+.mphpbb-cl-public .cl-public-products li { margin: 0; min-width: 0; list-style: none; }
+.mphpbb-cl-public .cl-public-products a {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	height: 100%;
+	padding: 14px;
+	border-left: 4px solid var(--cl-brand);
+	border-radius: var(--cl-radius);
+	background: var(--cl-tint);
+	color: var(--cl-ink);
+	text-decoration: none;
+}
+
+.mphpbb-cl-public .cl-public-products li:nth-child(even) a { background: var(--cl-tint-alt); }
+.mphpbb-cl-public .cl-product-text { display: grid; gap: 3px; flex: 1 1 auto; min-width: 0; }
+.mphpbb-cl-public .cl-product-text strong { color: var(--cl-link); font-size: 1.2em; }
+.mphpbb-cl-public .cl-product-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; color: var(--cl-muted); }
+.mphpbb-cl-public .cl-product-date { color: var(--cl-muted); font-size: 0.92em; }
+.mphpbb-cl-public .cl-product-arrow { flex: none; color: var(--cl-muted); font-size: 1.6em; }
+
+.mphpbb-cl-public .cl-tag,
+.mphpbb-cl-public .cl-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 3px;
+	padding: 1px 8px;
+	border: 1px solid var(--cl-control-line);
+	border-radius: 999px;
+	background: var(--cl-surface);
+	color: var(--cl-heading);
+	font-family: Consolas, Monaco, monospace;
+	font-size: 0.9em;
+	font-weight: 400;
+	line-height: 1.5;
+	white-space: nowrap;
+}
+
+.mphpbb-cl-public .cl-badge {
+	border-color: #BEDDBE;
+	background: var(--cl-success-bg);
+	color: var(--cl-success);
+	font-family: inherit;
+	font-size: 0.6em;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	vertical-align: middle;
+}
+
+/* ---------------------------------------------------------------- release timeline */
+.mphpbb-cl-public .cl-timeline { position: relative; margin: 0 0 12px; padding: 0 0 0 26px; list-style: none; }
+.mphpbb-cl-public .cl-timeline::before { content: ""; position: absolute; top: 10px; bottom: 10px; left: 8px; width: 2px; background: var(--cl-tint-strong); }
+.mphpbb-cl-public .cl-timeline > li { position: relative; margin: 0 0 12px; list-style: none; }
+.mphpbb-cl-public .cl-timeline > li::before {
+	content: "";
+	position: absolute;
+	top: 20px;
+	left: -24px;
+	width: 14px;
+	height: 14px;
+	border: 3px solid var(--cl-surface);
+	border-radius: 50%;
+	background: var(--cl-control-line);
+}
+
+.mphpbb-cl-public .cl-timeline > li:has(.cl-release-latest)::before { background: var(--cl-success); }
+
+.mphpbb-cl-public .cl-release {
+	padding: 14px 18px 16px;
+	border-radius: var(--cl-radius);
+	background: var(--cl-tint);
+	color: var(--cl-ink);
+}
+
+.mphpbb-cl-public .cl-timeline > li:nth-child(even) .cl-release { background: var(--cl-tint-alt); }
+.mphpbb-cl-public .cl-release-latest { box-shadow: inset 4px 0 0 var(--cl-success); }
+
+.mphpbb-cl-public .cl-release > header {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	gap: 4px 16px;
+	margin-bottom: 4px;
+	padding-bottom: 10px;
+	border-bottom: 1px solid var(--cl-line);
+}
+
+.mphpbb-cl-public .cl-release h3 { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; color: var(--cl-accent); font-size: 1.55em; font-weight: 700; }
+.mphpbb-cl-public .cl-release h3 > .icon { color: var(--cl-brand); font-size: 0.75em; }
+.mphpbb-cl-public .cl-release h3 a { color: var(--cl-accent); text-decoration: none; }
+.mphpbb-cl-public .cl-release time { display: inline-flex; align-items: center; gap: 2px; color: var(--cl-muted); }
+
+.mphpbb-cl-public .cl-section { margin-top: 12px; padding-left: 12px; border-left: 3px solid var(--cl-link); }
+.mphpbb-cl-public .cl-section h4 { display: flex; align-items: center; gap: 3px; margin-bottom: 4px; color: var(--cl-heading); font-size: 1.1em; font-weight: 700; }
+.mphpbb-cl-public .cl-section h4 .icon { color: var(--cl-link); }
+.mphpbb-cl-public .cl-section-features { border-left-color: var(--cl-success); }
+.mphpbb-cl-public .cl-section-features h4 .icon { color: var(--cl-success); }
+.mphpbb-cl-public .cl-section-fixes { border-left-color: var(--cl-error); }
+.mphpbb-cl-public .cl-section-fixes h4 .icon { color: var(--cl-error); }
+.mphpbb-cl-public .cl-section ul { margin: 0; padding-inline-start: 1.3em; }
+.mphpbb-cl-public .cl-section li { margin: 3px 0; line-height: 1.5; list-style: disc; }
+.mphpbb-cl-public .cl-release > .cl-links { margin-top: 14px; }
+
+/* ---------------------------------------------------------------- empty states, preview and pagination */
+.mphpbb-cl-public .cl-empty { margin: 0 0 12px; padding: 28px 16px; border-radius: var(--cl-radius); background: var(--cl-panel); color: var(--cl-muted); text-align: center; }
+.mphpbb-cl-public .cl-empty > .icon { display: block; margin-bottom: 8px; color: var(--cl-tint-strong); font-size: 40px; }
+.mphpbb-cl-public .cl-empty p { font-size: 1.1em; }
+.mphpbb-cl-public .cl-empty[role=alert] { background: var(--cl-error-bg); color: var(--cl-error); }
+.mphpbb-cl-public .cl-empty[role=alert] > .icon { color: var(--cl-error); }
+
+.mphpbb-cl-public .cl-preview-banner {
+	margin: 0 0 12px;
+	padding: 10px 14px;
+	border-left: 4px solid var(--cl-error);
+	border-radius: var(--cl-radius);
+	background: var(--cl-error-bg);
+	color: var(--cl-error);
+	font-weight: 700;
+}
+
+.mphpbb-cl-public .cl-pagination { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; margin: 4px 0 8px; color: var(--cl-muted); }
+
+/* ---------------------------------------------------------------- prosilver mobile breakpoint */
+@media (max-width: 700px) {
+	.mphpbb-cl-public .cl-heading h2 { font-size: 1.6em; }
+	.mphpbb-cl-public .cl-heading > .cl-initial { width: 48px; height: 48px; font-size: 1.6em; }
+	.mphpbb-cl-public .cl-search-box { flex-basis: 100%; max-width: 100%; }
+	.mphpbb-cl-public .cl-timeline { padding-left: 0; }
+	.mphpbb-cl-public .cl-timeline::before,
+	.mphpbb-cl-public .cl-timeline > li::before { display: none; }
+}

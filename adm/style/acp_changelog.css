@@ -1,0 +1,614 @@
+/*
+ * Changelog ACP module.
+ * Colours come from prosilver; buttons are flat and keep the same look on hover, focus and click.
+ */
+.mphpbb-cl-admin {
+	--cl-ink: #333333;
+	--cl-heading: #28313F;
+	--cl-accent: #115098;
+	--cl-link: #105289;
+	--cl-brand: #0076B1;
+	--cl-muted: #536482;
+	--cl-line: #CCCCCC;
+	--cl-line-soft: #DCE3E8;
+	--cl-control-line: #B4BAC0;
+	--cl-panel: #ECF1F3;
+	--cl-tint: #ECF3F7;
+	--cl-tint-alt: #E1EBF2;
+	--cl-tint-strong: #CADCEB;
+	--cl-surface: #FFFFFF;
+	--cl-success: #228822;
+	--cl-success-bg: #E6F2E6;
+	--cl-error: #BC2A4D;
+	--cl-error-bg: #F7ECEF;
+	--cl-radius: 7px;
+	box-sizing: border-box;
+	width: 100%;
+	margin: 0;
+	color: var(--cl-ink);
+	font-size: 1.12em;
+	line-height: 1.45;
+}
+
+.mphpbb-cl-admin *,
+.mphpbb-cl-admin *::before,
+.mphpbb-cl-admin *::after { box-sizing: border-box; }
+
+.mphpbb-cl-admin :is(h1, h2, h3, h4) {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	color: var(--cl-heading);
+	font-family: inherit;
+	text-transform: none;
+	letter-spacing: normal;
+	overflow-wrap: anywhere;
+}
+
+.mphpbb-cl-admin p { margin: 8px 0 12px; }
+.mphpbb-cl-admin a { color: var(--cl-link); }
+.mphpbb-cl-admin .cl-muted { color: var(--cl-muted); }
+.mphpbb-cl-admin .fa { line-height: inherit; }
+.mphpbb-cl-admin [hidden] { display: none !important; }
+
+/* ---------------------------------------------------------------- page header */
+.mphpbb-cl-admin .cl-admin-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 12px;
+	margin: 0 0 18px;
+	padding: 4px 0 16px;
+	border-bottom: 1px solid var(--cl-line);
+}
+
+.mphpbb-cl-admin .cl-admin-title { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.mphpbb-cl-admin .cl-admin-icon {
+	display: inline-flex;
+	flex: none;
+	align-items: center;
+	justify-content: center;
+	width: 46px;
+	height: 46px;
+	border-radius: var(--cl-radius);
+	background: var(--cl-brand);
+	color: #FFFFFF;
+	font-size: 22px;
+}
+
+#content .mphpbb-cl-admin h1 { color: var(--cl-accent); font-size: 1.9em; font-weight: 400; line-height: 1.2; }
+.mphpbb-cl-admin .cl-breadcrumbs { margin-top: 3px; color: var(--cl-muted); }
+.mphpbb-cl-admin .cl-breadcrumbs .fa { margin: 0 6px; }
+.mphpbb-cl-admin .cl-breadcrumbs span { color: var(--cl-heading); }
+.mphpbb-cl-admin .cl-breadcrumbs a + .fa + span { font-weight: 700; }
+
+/* ---------------------------------------------------------------- cards and panels */
+.mphpbb-cl-admin .cl-card {
+	margin: 0 0 16px;
+	padding: 18px 20px;
+	background: var(--cl-surface);
+	border: 1px solid var(--cl-line);
+	border-radius: var(--cl-radius);
+}
+
+.mphpbb-cl-admin .cl-card-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin: -18px -20px 14px;
+	padding: 12px 20px;
+	border-bottom: 1px solid var(--cl-line-soft);
+	border-radius: var(--cl-radius) var(--cl-radius) 0 0;
+	background: var(--cl-panel);
+}
+
+.mphpbb-cl-admin .cl-card-header :is(h2, h3) {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 8px;
+	color: var(--cl-heading);
+	font-size: 1.25em;
+	font-weight: 700;
+}
+
+.mphpbb-cl-admin .cl-card-header :is(h2, h3) > .fa { color: var(--cl-brand); }
+.mphpbb-cl-admin .cl-count {
+	min-width: 28px;
+	padding: 2px 9px;
+	border-radius: 999px;
+	background: var(--cl-tint-strong);
+	color: var(--cl-heading);
+	font-weight: 700;
+	text-align: center;
+}
+
+.mphpbb-cl-admin .cl-columns {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr));
+	gap: 0 16px;
+	align-items: start;
+}
+
+.mphpbb-cl-admin details.cl-panel { padding: 0; }
+.mphpbb-cl-admin details.cl-panel > summary {
+	display: flex;
+	align-items: center;
+	gap: 9px;
+	padding: 13px 20px;
+	border-radius: var(--cl-radius);
+	background: var(--cl-panel);
+	color: var(--cl-heading);
+	font-size: 1.12em;
+	font-weight: 700;
+	list-style: none;
+	cursor: pointer;
+}
+
+.mphpbb-cl-admin details.cl-panel > summary::-webkit-details-marker { display: none; }
+.mphpbb-cl-admin details.cl-panel > summary > .fa { color: var(--cl-brand); width: 1.1em; text-align: center; }
+.mphpbb-cl-admin details.cl-panel > summary::after {
+	content: "\f105";
+	margin-left: auto;
+	color: var(--cl-muted);
+	font-family: FontAwesome;
+	font-weight: 400;
+}
+
+.mphpbb-cl-admin details.cl-panel[open] > summary {
+	border-bottom: 1px solid var(--cl-line-soft);
+	border-radius: var(--cl-radius) var(--cl-radius) 0 0;
+}
+
+.mphpbb-cl-admin details.cl-panel[open] > summary::after { content: "\f107"; }
+.mphpbb-cl-admin .cl-panel-body { padding: 16px 20px 18px; }
+.mphpbb-cl-admin .cl-panel-body > :first-child { margin-top: 0; }
+
+/* ---------------------------------------------------------------- product list */
+.mphpbb-cl-admin .cl-product-list {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+	gap: 12px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.mphpbb-cl-admin .cl-product-list li { margin: 0; min-width: 0; }
+.mphpbb-cl-admin .cl-product-list a {
+	display: grid;
+	grid-template-columns: auto minmax(0, 1fr);
+	grid-template-areas: "icon text" "icon state";
+	align-items: start;
+	gap: 4px 12px;
+	height: 100%;
+	padding: 14px;
+	border: 1px solid var(--cl-line);
+	border-left: 4px solid var(--cl-brand);
+	border-radius: var(--cl-radius);
+	background: var(--cl-tint);
+	color: var(--cl-ink);
+	text-decoration: none;
+}
+
+.mphpbb-cl-admin .cl-product-list .cl-product-initial { grid-area: icon; }
+.mphpbb-cl-admin .cl-product-list .cl-product-text { grid-area: text; display: grid; gap: 2px; min-width: 0; }
+.mphpbb-cl-admin .cl-product-list .cl-visibility { grid-area: state; justify-self: start; margin-top: 6px; }
+.mphpbb-cl-admin .cl-product-list strong { color: var(--cl-link); font-size: 1.15em; overflow-wrap: anywhere; }
+.mphpbb-cl-admin .cl-product-slug { color: var(--cl-muted); font-family: Consolas, Monaco, monospace; font-size: 0.92em; overflow-wrap: anywhere; }
+.mphpbb-cl-admin .cl-product-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; margin-top: 4px; color: var(--cl-muted); }
+
+.mphpbb-cl-admin .cl-product-initial {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 42px;
+	height: 42px;
+	border-radius: var(--cl-radius);
+	background: var(--cl-link);
+	color: #FFFFFF;
+	font-size: 1.3em;
+	font-weight: 700;
+}
+
+.mphpbb-cl-admin .cl-product-initial-large { width: 58px; height: 58px; font-size: 1.8em; flex: none; }
+
+/* ---------------------------------------------------------------- pills */
+.mphpbb-cl-admin :is(.cl-tag, .cl-status, .cl-visibility) {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	padding: 2px 9px;
+	border: 1px solid transparent;
+	border-radius: 999px;
+	font-size: 0.9em;
+	font-weight: 700;
+	line-height: 1.5;
+	white-space: nowrap;
+}
+
+.mphpbb-cl-admin .cl-tag { background: var(--cl-surface); border-color: var(--cl-control-line); color: var(--cl-heading); font-family: Consolas, Monaco, monospace; font-weight: 400; }
+.mphpbb-cl-admin :is(.cl-status, .cl-visibility) { background: var(--cl-tint-alt); border-color: var(--cl-tint-strong); color: var(--cl-muted); }
+.mphpbb-cl-admin :is(.cl-status-public, .cl-visibility-public) { background: var(--cl-success-bg); border-color: #BEDDBE; color: var(--cl-success); }
+
+/* ---------------------------------------------------------------- product header */
+.mphpbb-cl-admin .cl-product-header {
+	margin: 0 0 16px;
+	padding: 18px 20px;
+	border: 1px solid var(--cl-line);
+	border-radius: var(--cl-radius);
+	background: var(--cl-tint);
+}
+
+.mphpbb-cl-admin .cl-product-heading { display: flex; align-items: center; flex-wrap: wrap; gap: 14px; }
+.mphpbb-cl-admin .cl-product-heading > div:not(.cl-actions) { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; flex: 1 1 260px; min-width: 0; }
+.mphpbb-cl-admin .cl-product-heading h2 { flex-basis: 100%; font-size: 1.7em; font-weight: 400; line-height: 1.2; }
+.mphpbb-cl-admin .cl-product-heading h2 a { color: var(--cl-accent); text-decoration: none; }
+.mphpbb-cl-admin .cl-product-buttons { margin-left: auto; }
+
+.mphpbb-cl-admin .cl-stats {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr));
+	gap: 10px;
+	margin: 16px 0 0;
+}
+
+.mphpbb-cl-admin .cl-stats > div {
+	padding: 10px 14px;
+	border: 1px solid var(--cl-line-soft);
+	border-radius: var(--cl-radius);
+	background: var(--cl-surface);
+}
+
+.mphpbb-cl-admin .cl-stats dt { display: block; }
+.mphpbb-cl-admin .cl-stats dt { color: var(--cl-muted); font-size: 0.85em; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; }
+.mphpbb-cl-admin .cl-stats dd { margin: 4px 0 0; padding: 0; color: var(--cl-accent); font-size: 1.5em; font-weight: 700; line-height: 1.25; overflow-wrap: anywhere; }
+.mphpbb-cl-admin .cl-stats dd.cl-stat-text { font-size: 1.1em; }
+
+/* ---------------------------------------------------------------- tabs */
+.mphpbb-cl-admin .cl-tabs {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px;
+	margin: 0 0 16px;
+	padding: 0 6px;
+	border-bottom: 1px solid var(--cl-line);
+}
+
+.mphpbb-cl-admin .cl-tabs a {
+	display: inline-flex;
+	align-items: center;
+	gap: 7px;
+	margin-bottom: -1px;
+	padding: 10px 16px;
+	border: 1px solid transparent;
+	border-bottom: 0;
+	border-radius: var(--cl-radius) var(--cl-radius) 0 0;
+	color: var(--cl-link);
+	font-weight: 700;
+	text-decoration: none;
+}
+
+.mphpbb-cl-admin .cl-tabs a[aria-current] {
+	border-color: var(--cl-line);
+	border-top: 3px solid var(--cl-brand);
+	background: var(--cl-surface);
+	color: var(--cl-heading);
+}
+
+.mphpbb-cl-admin .cl-tabs a[aria-current] .fa { color: var(--cl-brand); }
+
+/* ---------------------------------------------------------------- forms */
+.mphpbb-cl-admin .cl-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; }
+.mphpbb-cl-admin .cl-grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.mphpbb-cl-admin .cl-form-wide { grid-column: 1 / -1; }
+.mphpbb-cl-admin label { display: block; min-width: 0; padding: 0; color: var(--cl-heading); font-size: 1em; font-weight: 700; }
+.mphpbb-cl-admin :is(dl, dt, dd) { float: none; width: auto; font-family: inherit; }
+.mphpbb-cl-admin label.cl-check { display: inline-flex; align-items: center; gap: 8px; font-weight: 400; }
+
+.mphpbb-cl-admin :is(input[type=text], input[type=search], input[type=file], input[type=url], input[type=date], select, textarea) {
+	max-width: 100%;
+	min-width: 0;
+	min-height: 38px;
+	margin: 0;
+	padding: 7px 10px;
+	border: 1px solid var(--cl-control-line);
+	border-radius: 4px;
+	background: var(--cl-surface);
+	color: var(--cl-ink);
+	font: inherit;
+	font-weight: 400;
+	box-shadow: none;
+}
+
+.mphpbb-cl-admin label > :is(input:not([type=checkbox]), select, textarea),
+.mphpbb-cl-admin textarea {
+	display: block;
+	width: 100%;
+	margin-top: 5px;
+}
+
+.mphpbb-cl-admin textarea { resize: vertical; line-height: 1.55; }
+.mphpbb-cl-admin .cl-code,
+.mphpbb-cl-admin textarea[readonly] {
+	background: #F5F7FA;
+	border-color: #C9D2D8;
+	color: var(--cl-heading);
+	font-family: Consolas, Monaco, "Courier New", monospace;
+	font-size: 0.95em;
+}
+
+.mphpbb-cl-admin [aria-invalid=true] { border-color: var(--cl-error); }
+.mphpbb-cl-admin input[type=file] { padding: 5px; background: var(--cl-tint); }
+.mphpbb-cl-admin input::file-selector-button {
+	margin-inline-end: 10px;
+	padding: 5px 10px;
+	border: 1px solid var(--cl-control-line);
+	border-radius: 4px;
+	background: var(--cl-surface);
+	color: var(--cl-link);
+	font: inherit;
+	font-weight: 700;
+	cursor: pointer;
+}
+
+.mphpbb-cl-admin :is(a, button, input, select, textarea, summary):focus-visible { outline: 2px solid #11A3EA; outline-offset: 1px; }
+
+.mphpbb-cl-admin .cl-toolbar {
+	display: flex;
+	align-items: flex-end;
+	flex-wrap: wrap;
+	gap: 10px 12px;
+	margin: 0 0 14px;
+	padding: 12px 14px;
+	border: 1px solid var(--cl-line-soft);
+	border-radius: var(--cl-radius);
+	background: var(--cl-tint);
+}
+
+.mphpbb-cl-admin .cl-toolbar label { flex: 0 1 220px; }
+.mphpbb-cl-admin .cl-toolbar .cl-toolbar-search { flex: 1 1 260px; }
+.mphpbb-cl-admin .cl-toolbar:last-child { margin-bottom: 0; }
+.mphpbb-cl-admin .cl-toolbar-arrow { align-self: center; padding-top: 22px; color: var(--cl-muted); font-size: 1.3em; }
+
+.mphpbb-cl-admin .cl-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.mphpbb-cl-admin .cl-form-actions { margin-top: 16px; }
+.mphpbb-cl-admin .cl-pager { justify-content: center; margin-top: 14px; }
+
+.mphpbb-cl-admin .cl-compare-files .cl-file-box {
+	display: grid;
+	gap: 8px;
+	padding: 14px;
+	border: 1px dashed var(--cl-control-line);
+	border-radius: var(--cl-radius);
+	background: var(--cl-tint);
+}
+
+.mphpbb-cl-admin .cl-compare-files .cl-file-box .fa { color: var(--cl-brand); }
+.mphpbb-cl-admin .cl-compare-files input[type=file] { margin: 0; background: var(--cl-surface); }
+
+/* ---------------------------------------------------------------- buttons */
+#content .mphpbb-cl-admin :is(.button1, .button2, .cl-quiet-button),
+#content .mphpbb-cl-admin :is(.button1, .button2, .cl-quiet-button):is(:hover, :focus, :active, :link, :visited) {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 7px;
+	width: auto !important;
+	max-width: 100%;
+	min-height: 36px;
+	margin: 0;
+	padding: 6px 14px;
+	border: 1px solid var(--cl-control-line);
+	border-radius: 4px;
+	background: var(--cl-surface);
+	background-image: none;
+	color: var(--cl-link);
+	font: inherit;
+	font-weight: 700;
+	line-height: 1.35;
+	text-align: center;
+	text-decoration: none;
+	text-shadow: none;
+	white-space: normal;
+	overflow-wrap: anywhere;
+	box-shadow: none;
+	outline: none;
+	transition: none;
+	transform: none;
+	filter: none;
+	cursor: pointer;
+}
+
+#content .mphpbb-cl-admin .button1,
+#content .mphpbb-cl-admin .button1:is(:hover, :focus, :active, :link, :visited) {
+	border-color: var(--cl-link);
+	background: var(--cl-link);
+	color: #FFFFFF;
+}
+
+#content .mphpbb-cl-admin .cl-quiet-button,
+#content .mphpbb-cl-admin .cl-quiet-button:is(:hover, :focus, :active, :link, :visited) { border-color: transparent; background: transparent; }
+#content .mphpbb-cl-admin :is(.button1, .button2, .cl-quiet-button):focus-visible { outline: 2px solid #11A3EA; outline-offset: 2px; }
+
+#content .mphpbb-cl-admin .cl-button-danger,
+#content .mphpbb-cl-admin .cl-button-danger:is(:hover, :focus, :active, :link, :visited) {
+	border-color: var(--cl-error);
+	background: var(--cl-surface);
+	color: var(--cl-error);
+}
+
+.mphpbb-cl-admin .cl-danger { border-color: #E3B5C1; }
+.mphpbb-cl-admin .cl-danger .cl-card-header { background: var(--cl-error-bg); border-bottom-color: #E3B5C1; }
+.mphpbb-cl-admin .cl-danger .cl-card-header :is(h2, h3),
+.mphpbb-cl-admin .cl-danger .cl-card-header :is(h2, h3) > .fa { color: var(--cl-error); }
+.mphpbb-cl-admin .cl-danger-body { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px 16px; }
+.mphpbb-cl-admin .cl-danger-body p { flex: 1 1 320px; margin: 0; color: var(--cl-muted); }
+
+/* ---------------------------------------------------------------- tables */
+#content .mphpbb-cl-admin table.cl-table {
+	width: 100%;
+	margin: 0;
+	border: 1px solid var(--cl-line);
+	border-collapse: separate;
+	border-spacing: 0;
+	border-radius: var(--cl-radius);
+	overflow: hidden;
+	background: var(--cl-surface);
+}
+
+#content .mphpbb-cl-admin table.cl-table :is(th, td) {
+	padding: 10px 14px;
+	border: 0;
+	border-top: 1px solid var(--cl-line-soft);
+	background: none;
+	color: var(--cl-ink);
+	font-size: 1em;
+	text-align: left;
+	vertical-align: middle;
+}
+
+#content .mphpbb-cl-admin table.cl-table thead th {
+	border-top: 0;
+	background: var(--cl-brand);
+	color: #FFFFFF;
+	font-size: 0.85em;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+}
+
+#content .mphpbb-cl-admin table.cl-table tbody tr:nth-child(odd) :is(th, td) { background: var(--cl-tint); }
+#content .mphpbb-cl-admin table.cl-table tbody tr:nth-child(even) :is(th, td) { background: var(--cl-tint-alt); }
+#content .mphpbb-cl-admin table.cl-table tbody tr:first-child :is(th, td) { border-top: 0; }
+#content .mphpbb-cl-admin table.cl-table tbody th { text-transform: none; letter-spacing: normal; font-weight: 400; }
+#content .mphpbb-cl-admin table.cl-table tbody th a { color: var(--cl-link); font-family: Consolas, Monaco, monospace; font-size: 1.05em; text-decoration: none; }
+#content .mphpbb-cl-admin table.cl-table td.cl-muted { color: var(--cl-muted); }
+#content .mphpbb-cl-admin table.cl-table .cl-col-actions { text-align: right; }
+#content .mphpbb-cl-admin table.cl-table .cl-col-actions .cl-actions { justify-content: flex-end; }
+#content .mphpbb-cl-admin table.cl-table .cl-col-actions :is(.button1, .button2) { min-height: 30px; padding: 3px 10px; font-size: 0.92em; }
+
+/* ---------------------------------------------------------------- empty states and messages */
+.mphpbb-cl-admin .cl-empty { padding: 28px 16px; text-align: center; color: var(--cl-muted); }
+.mphpbb-cl-admin .cl-empty > .fa { display: block; margin-bottom: 8px; color: var(--cl-tint-strong); font-size: 42px; }
+.mphpbb-cl-admin .cl-empty p { margin: 0 0 12px; font-size: 1.08em; }
+.mphpbb-cl-admin .cl-empty-inline {
+	margin: 0 0 12px;
+	padding: 10px 14px;
+	border-radius: var(--cl-radius);
+	background: var(--cl-tint);
+	color: var(--cl-muted);
+}
+
+.mphpbb-cl-admin .cl-empty-inline[role=alert] { background: var(--cl-error-bg); color: var(--cl-error); }
+
+/* ---------------------------------------------------------------- editor */
+.mphpbb-cl-admin .cl-sections { display: grid; gap: 12px; margin-top: 16px; }
+.mphpbb-cl-admin .cl-editor-field {
+	margin: 0;
+	padding: 12px 14px;
+	border: 1px solid var(--cl-line-soft);
+	border-left: 4px solid var(--cl-link);
+	border-radius: var(--cl-radius);
+	background: var(--cl-tint);
+}
+
+.mphpbb-cl-admin .cl-section-title { display: inline-flex; align-items: center; gap: 7px; font-size: 1.05em; }
+.mphpbb-cl-admin .cl-section-features { border-left-color: var(--cl-success); }
+.mphpbb-cl-admin .cl-section-features .cl-section-title .fa { color: var(--cl-success); }
+.mphpbb-cl-admin .cl-section-improvements .cl-section-title .fa { color: var(--cl-link); }
+.mphpbb-cl-admin .cl-section-fixes { border-left-color: var(--cl-error); }
+.mphpbb-cl-admin .cl-section-fixes .cl-section-title .fa { color: var(--cl-error); }
+
+.mphpbb-cl-admin .cl-editor-actions {
+	margin: 18px -20px -18px;
+	padding: 14px 20px;
+	border-top: 1px solid var(--cl-line-soft);
+	border-radius: 0 0 var(--cl-radius) var(--cl-radius);
+	background: var(--cl-panel);
+}
+
+.mphpbb-cl-admin .cl-push-right { margin-left: auto !important; }
+.mphpbb-cl-admin .cl-bbcode .cl-toolbar label { flex: 0 1 240px; }
+.mphpbb-cl-admin .cl-bbcode #cl-copy-status,
+.mphpbb-cl-admin #cl-copy-product-status { color: var(--cl-success); font-weight: 700; }
+
+/* ---------------------------------------------------------------- history */
+.mphpbb-cl-admin .cl-timeline { position: relative; margin: 0; padding: 0 0 0 22px; list-style: none; }
+.mphpbb-cl-admin .cl-timeline::before { content: ""; position: absolute; top: 6px; bottom: 6px; left: 6px; width: 2px; background: var(--cl-tint-strong); }
+.mphpbb-cl-admin .cl-timeline li {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 8px 14px;
+	margin: 0 0 10px;
+	padding: 10px 14px;
+	border: 1px solid var(--cl-line-soft);
+	border-radius: var(--cl-radius);
+	background: var(--cl-tint);
+}
+
+.mphpbb-cl-admin .cl-timeline li::before {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: -21px;
+	width: 12px;
+	height: 12px;
+	margin-top: -6px;
+	border: 2px solid var(--cl-surface);
+	border-radius: 50%;
+	background: var(--cl-brand);
+}
+
+/* ---------------------------------------------------------------- ZIP comparison */
+.mphpbb-cl-admin .cl-compare-package { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 1.1em; }
+.mphpbb-cl-admin .cl-counts { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 14px; padding: 0; list-style: none; }
+.mphpbb-cl-admin .cl-counts li { padding: 8px 14px; border-radius: var(--cl-radius); font-weight: 700; }
+.mphpbb-cl-admin .cl-count-added { background: var(--cl-success-bg); color: var(--cl-success); }
+.mphpbb-cl-admin .cl-count-changed { background: var(--cl-tint-alt); color: var(--cl-link); }
+.mphpbb-cl-admin .cl-count-removed { background: var(--cl-error-bg); color: var(--cl-error); }
+.mphpbb-cl-admin .cl-file-details > summary { color: var(--cl-link); font-weight: 700; cursor: pointer; }
+.mphpbb-cl-admin .cl-file-list { max-height: 300px; overflow: auto; margin: 10px 0 0; padding: 0; border: 1px solid var(--cl-line-soft); border-radius: var(--cl-radius); list-style: none; }
+.mphpbb-cl-admin .cl-file-list li { display: flex; gap: 10px; margin: 0; padding: 6px 12px; border-top: 1px solid var(--cl-line-soft); overflow-wrap: anywhere; }
+.mphpbb-cl-admin .cl-file-list li:first-child { border-top: 0; }
+.mphpbb-cl-admin .cl-file-list strong { flex: none; min-width: 90px; }
+.mphpbb-cl-admin .cl-file-added strong { color: var(--cl-success); }
+.mphpbb-cl-admin .cl-file-changed strong { color: var(--cl-link); }
+.mphpbb-cl-admin .cl-file-removed strong { color: var(--cl-error); }
+
+/* ---------------------------------------------------------------- notes comparison */
+.mphpbb-cl-admin .cl-notes-diff-group { padding: 14px 0 4px; border-top: 1px solid var(--cl-line-soft); }
+.mphpbb-cl-admin .cl-card-header + .cl-notes-diff-group { border-top: 0; padding-top: 0; }
+.mphpbb-cl-admin .cl-notes-diff-group h4 { margin-bottom: 10px; font-size: 1.1em; }
+.mphpbb-cl-admin :is(.cl-diff-removed, .cl-diff-added) { padding: 10px 14px; border-radius: var(--cl-radius); border-left: 4px solid; }
+.mphpbb-cl-admin .cl-diff-removed { background: var(--cl-error-bg); border-left-color: var(--cl-error); color: var(--cl-error); }
+.mphpbb-cl-admin .cl-diff-added { background: var(--cl-success-bg); border-left-color: var(--cl-success); color: var(--cl-success); }
+.mphpbb-cl-admin .cl-notes-diff ul { margin: 6px 0 0; padding-inline-start: 1.3rem; }
+.mphpbb-cl-admin .cl-notes-diff :is(li, dd) { overflow-wrap: anywhere; }
+.mphpbb-cl-admin .cl-notes-diff dl { margin: 6px 0 12px; }
+.mphpbb-cl-admin .cl-notes-diff dt { font-weight: 700; }
+.mphpbb-cl-admin .cl-notes-diff dd { margin: 2px 0 0; }
+.mphpbb-cl-admin .cl-bulk-confirm { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--cl-line-soft); }
+.mphpbb-cl-admin .cl-bulk-confirm h4 { font-size: 1.1em; }
+.mphpbb-cl-admin .cl-check-disabled { display: inline-flex; align-items: center; gap: 8px; color: var(--cl-muted); }
+
+/* ---------------------------------------------------------------- small screens */
+@media (max-width: 700px) {
+	.mphpbb-cl-admin :is(.cl-grid, .cl-grid-3) { grid-template-columns: minmax(0, 1fr); }
+	.mphpbb-cl-admin .cl-toolbar label { flex: 1 1 100%; }
+	.mphpbb-cl-admin .cl-toolbar-arrow { display: none; }
+	.mphpbb-cl-admin .cl-product-buttons { margin-left: 0; }
+	.mphpbb-cl-admin .cl-push-right { margin-left: 0 !important; }
+	#content .mphpbb-cl-admin table.cl-table thead { display: none; }
+	#content .mphpbb-cl-admin table.cl-table tr { display: grid; grid-template-columns: 1fr auto; }
+	#content .mphpbb-cl-admin table.cl-table :is(th, td) { border-top: 0; }
+	#content .mphpbb-cl-admin table.cl-table tbody tr { border-top: 1px solid var(--cl-line-soft); }
+	#content .mphpbb-cl-admin table.cl-table :is(.cl-col-actions, .cl-col-date) { grid-column: 1 / -1; text-align: left; }
+	#content .mphpbb-cl-admin table.cl-table .cl-col-actions .cl-actions { justify-content: flex-start; }
+}

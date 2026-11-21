@@ -1,0 +1,543 @@
+{% INCLUDE 'overall_header.html' %}
+{% INCLUDECSS '@mundophpbb_changelog/acp_changelog.css' %}
+{% INCLUDEJS '@mundophpbb_changelog/acp_changelog.js' %}
+<link href="{{ T_FONT_AWESOME_LINK }}" rel="stylesheet">
+
+<div class="mphpbb-cl-admin">
+	<header class="cl-admin-header">
+		<div class="cl-admin-title">
+			<span class="cl-admin-icon" aria-hidden="true"><i class="fa fa-history"></i></span>
+			<div>
+				<h1>{{ lang('ACP_MPHPBB_CL_MANAGE') }}</h1>
+				<nav class="cl-breadcrumbs" aria-label="{{ lang('CL_PRODUCT_NAVIGATION') }}">
+					{% if CL_PRODUCT %}
+						<a href="{{ CL_BASE_URL|raw }}">{{ lang('CL_PRODUCTS') }}</a>
+						<i class="fa fa-angle-right" aria-hidden="true"></i>
+						<span>{{ CL_PRODUCT.title|e }}</span>
+					{% else %}
+						<span>{{ lang('CL_ADMIN_INTRO') }}</span>
+					{% endif %}
+				</nav>
+			</div>
+		</div>
+		<a class="button2" href="{{ CL_INDEX_URL|raw }}"><i class="fa fa-external-link" aria-hidden="true"></i> {{ lang('CL_PUBLIC_INDEX') }}</a>
+	</header>
+
+	{% if CL_ERROR %}
+		<div class="errorbox" role="alert">
+			<p>{{ CL_ERROR|e }}</p>
+			{% if CL_RELOAD_URL %}<a href="{{ CL_RELOAD_URL|raw }}">{{ lang('CL_RELOAD') }}</a>{% endif %}
+		</div>
+	{% endif %}
+	{% if CL_NOTICE %}<div class="successbox" role="status"><p>{{ CL_NOTICE|e }}</p></div>{% endif %}
+
+	{% if not CL_PRODUCT %}
+		{% if CL_PRODUCTS %}
+			<section class="cl-card" aria-labelledby="cl-products-title">
+				<div class="cl-card-header">
+					<h2 id="cl-products-title"><i class="fa fa-cubes" aria-hidden="true"></i> {{ lang('CL_PRODUCTS') }}</h2>
+					<span class="cl-count">{{ CL_PRODUCTS|length }}</span>
+				</div>
+				<ul class="cl-product-list">
+					{% for product in CL_PRODUCTS %}
+						<li>
+							<a href="{{ product.url|raw }}">
+								<span class="cl-product-initial" aria-hidden="true">{{ product.initial|e }}</span>
+								<span class="cl-product-text">
+									<strong>{{ product.title|e }}</strong>
+									<span class="cl-product-slug">/{{ product.slug|e }}</span>
+									<span class="cl-product-meta">
+										{% if product.latest_version %}
+											<span class="cl-tag"><i class="fa fa-tag" aria-hidden="true"></i> {{ product.latest_version|e }}</span>
+										{% endif %}
+										<span>{{ lang('CL_PRODUCT_RELEASES_SUMMARY', product.published, product.drafts) }}</span>
+									</span>
+								</span>
+								<span class="cl-visibility{% if product.is_public %} cl-visibility-public{% endif %}">
+									<i class="fa {{ product.is_public ? 'fa-globe' : 'fa-eye-slash' }}" aria-hidden="true"></i>
+									{{ lang(product.is_public ? 'CL_PRODUCT_PUBLIC' : 'CL_PRODUCT_HIDDEN') }}
+								</span>
+							</a>
+						</li>
+					{% endfor %}
+				</ul>
+			</section>
+		{% else %}
+			<section class="cl-card cl-empty">
+				<i class="fa fa-cubes" aria-hidden="true"></i>
+				<p>{{ lang('CL_NO_PRODUCTS') }}</p>
+			</section>
+		{% endif %}
+
+		<div class="cl-columns">
+			<details class="cl-card cl-panel"{% if not CL_PRODUCTS or CL_NEW_TITLE or CL_NEW_SLUG %} open{% endif %}>
+				<summary><i class="fa fa-plus-circle" aria-hidden="true"></i> {{ lang('CL_NEW_PRODUCT') }}</summary>
+				<div class="cl-panel-body">
+					<form method="post" action="{{ CL_BASE_URL|raw }}">
+						<div class="cl-grid">
+							<label for="cl-product-title">{{ lang('CL_TITLE_LABEL') }}
+								<input id="cl-product-title" name="title" type="text" maxlength="120" value="{{ CL_NEW_TITLE|e }}" required>
+							</label>
+							<label for="cl-product-slug">{{ lang('CL_SLUG') }}
+								<input id="cl-product-slug" name="slug" type="text" maxlength="80" pattern="[a-z0-9][a-z0-9\-]{0,79}" placeholder="downloadcenter" value="{{ CL_NEW_SLUG|e }}" required>
+							</label>
+							<label for="cl-product-download">{{ lang('CL_PRODUCT_DOWNLOAD_LABEL') }}
+								<input id="cl-product-download" name="product_download_url" type="url" maxlength="{{ CL_PRODUCT_LINK_LIMIT|e }}" value="{{ CL_NEW_PRODUCT_DOWNLOAD|e }}">
+							</label>
+							<label for="cl-product-support">{{ lang('CL_PRODUCT_SUPPORT_LABEL') }}
+								<input id="cl-product-support" name="product_support_url" type="url" maxlength="{{ CL_PRODUCT_LINK_LIMIT|e }}" value="{{ CL_NEW_PRODUCT_SUPPORT|e }}">
+							</label>
+						</div>
+						<p class="cl-muted">{{ lang('CL_SLUG_HELP') }} {{ lang('CL_PRODUCT_DOWNLOAD_HELP') }}</p>
+						<div class="cl-actions cl-form-actions">
+							<button class="button1" type="submit" name="operation" value="create_product"><i class="fa fa-plus" aria-hidden="true"></i> {{ lang('CL_CREATE_PRODUCT') }}</button>
+						</div>
+						{{ S_FORM_TOKEN|raw }}
+					</form>
+				</div>
+			</details>
+
+			<details class="cl-card cl-panel"{% if CL_NAV_SETTINGS_OPEN %} open{% endif %}>
+				<summary><i class="fa fa-cog" aria-hidden="true"></i> {{ lang('CL_PUBLIC_SETTINGS') }}</summary>
+				<div class="cl-panel-body">
+					<form method="post" action="{{ CL_ACTION|raw }}">
+						<label for="cl-show-navigation" class="cl-check">
+							<input type="checkbox" id="cl-show-navigation" name="show_navigation" value="1"{% if CL_NAV_ENABLED %} checked{% endif %}>
+							{{ lang('CL_NAV_SHOW') }}
+						</label>
+						<p class="cl-muted">{{ lang('CL_NAV_HELP') }}</p>
+						<div class="cl-actions cl-form-actions">
+							<button class="button1" type="submit" name="operation" value="save_navigation"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ lang('CL_NAV_SAVE') }}</button>
+						</div>
+						{{ S_FORM_TOKEN|raw }}
+					</form>
+				</div>
+			</details>
+		</div>
+
+	{% else %}
+		<section class="cl-product-header">
+			<div class="cl-product-heading">
+				<span class="cl-product-initial cl-product-initial-large" aria-hidden="true">{{ CL_PRODUCT_SUMMARY.initial|e }}</span>
+				<div>
+					<h2><a href="{{ CL_VERSIONS_URL|raw }}">{{ CL_PRODUCT.title|e }}</a></h2>
+					<span class="cl-visibility{% if CL_PRODUCT_SUMMARY.is_public %} cl-visibility-public{% endif %}">
+						<i class="fa {{ CL_PRODUCT_SUMMARY.is_public ? 'fa-globe' : 'fa-eye-slash' }}" aria-hidden="true"></i>
+						{{ lang(CL_PRODUCT_SUMMARY.is_public ? 'CL_PRODUCT_PUBLIC' : 'CL_PRODUCT_HIDDEN') }}
+					</span>
+					<span class="cl-product-slug">/{{ CL_PRODUCT.slug|e }}</span>
+				</div>
+				<div class="cl-actions cl-product-buttons">
+					{% if CL_PUBLIC_URL %}<a class="button2" href="{{ CL_PUBLIC_URL|raw }}"><i class="fa fa-external-link" aria-hidden="true"></i> {{ lang('CL_VIEW_PUBLIC') }}</a>{% endif %}
+					<a class="button1" href="{{ CL_NEW_RELEASE_URL|raw }}"><i class="fa fa-plus" aria-hidden="true"></i> {{ lang('CL_NEW_RELEASE') }}</a>
+				</div>
+			</div>
+			<dl class="cl-stats">
+				<div><dt>{{ lang('CL_STAT_PUBLISHED') }}</dt><dd>{{ CL_PRODUCT_SUMMARY.published }}</dd></div>
+				<div><dt>{{ lang('CL_STAT_DRAFTS') }}</dt><dd>{{ CL_PRODUCT_SUMMARY.drafts }}</dd></div>
+				<div><dt>{{ lang('CL_STAT_LATEST') }}</dt><dd>{{ CL_PRODUCT_SUMMARY.latest_version ? CL_PRODUCT_SUMMARY.latest_version|e : lang('CL_STAT_NONE') }}</dd></div>
+				<div><dt>{{ lang('CL_STAT_LAST_PUBLISHED') }}</dt><dd class="cl-stat-text">{{ CL_PRODUCT_SUMMARY.latest_date ? CL_PRODUCT_SUMMARY.latest_date|e : lang('CL_STAT_NONE') }}</dd></div>
+			</dl>
+		</section>
+
+		<nav class="cl-tabs" aria-label="{{ lang('CL_PRODUCT_NAVIGATION') }}">
+			<a href="{{ CL_VERSIONS_URL|raw }}"{% if CL_VIEW == 'versions' or CL_VIEW == 'editor' or CL_VIEW == 'history' %} aria-current="page"{% endif %}><i class="fa fa-list-ul" aria-hidden="true"></i> {{ lang('CL_RELEASES') }}</a>
+			<a href="{{ CL_IMPORT_URL|raw }}"{% if CL_VIEW == 'import' %} aria-current="page"{% endif %}><i class="fa fa-upload" aria-hidden="true"></i> {{ lang('CL_IMPORT_TAB') }}</a>
+			<a href="{{ CL_COMPARE_URL|raw }}"{% if CL_VIEW == 'compare' %} aria-current="page"{% endif %}><i class="fa fa-file-archive-o" aria-hidden="true"></i> {{ lang('CL_COMPARE_TITLE') }}</a>
+			<a href="{{ CL_NOTES_COMPARE_URL|raw }}"{% if CL_VIEW == 'compare_notes' %} aria-current="page"{% endif %}><i class="fa fa-exchange" aria-hidden="true"></i> {{ lang('CL_NOTES_COMPARE') }}</a>
+		</nav>
+
+		{% if CL_VIEW == 'versions' %}
+			<section class="cl-card" aria-labelledby="cl-release-list">
+				<div class="cl-card-header">
+					<h3 id="cl-release-list"><i class="fa fa-list-ul" aria-hidden="true"></i> {{ lang('CL_RELEASES') }}</h3>
+				</div>
+				<form class="cl-toolbar" role="search" method="get" action="{{ CL_FILTER_ACTION|e }}">
+					{% for name, value in CL_FILTER_FIELDS %}
+						<input type="hidden" name="{{ name|e }}" value="{{ value|e }}">
+					{% endfor %}
+					<label for="cl-filter-version" class="cl-toolbar-search">{{ lang('CL_SEARCH_VERSION') }}
+						<input id="cl-filter-version" type="search" name="filter_version" maxlength="64" value="{{ CL_FILTER_VERSION|e }}"{% if CL_FILTER_INVALID %} aria-invalid="true" aria-describedby="cl-filter-message"{% endif %}>
+					</label>
+					<label for="cl-filter-status">{{ lang('CL_FILTER_STATUS') }}
+						<select id="cl-filter-status" name="filter_status">
+							{% for key, label in CL_FILTER_OPTIONS %}
+								<option value="{{ key|e }}"{% if key == CL_FILTER_STATUS %} selected{% endif %}>{{ lang(label) }}</option>
+							{% endfor %}
+						</select>
+					</label>
+					<div class="cl-actions">
+						<button class="button2" type="submit"><i class="fa fa-filter" aria-hidden="true"></i> {{ lang('CL_FILTER_APPLY') }}</button>
+						{% if CL_FILTER_CLEAR_URL %}<a class="cl-quiet-button" href="{{ CL_FILTER_CLEAR_URL|raw }}"><i class="fa fa-times" aria-hidden="true"></i> {{ lang('CL_FILTER_CLEAR') }}</a>{% endif %}
+					</div>
+				</form>
+				{% if CL_RELEASES %}
+					<table class="cl-table cl-releases not-responsive">
+						<thead>
+							<tr>
+								<th scope="col">{{ lang('CL_COL_VERSION') }}</th>
+								<th scope="col">{{ lang('CL_FILTER_STATUS') }}</th>
+								<th scope="col">{{ lang('CL_COL_PUBLISHED') }}</th>
+								<th scope="col" class="cl-col-actions">{{ lang('CL_COL_ACTIONS') }}</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for release in CL_RELEASES %}
+								<tr>
+									<th scope="row"><a href="{{ release.url|raw }}"><strong>{{ release.version|e }}</strong></a></th>
+									<td>
+										<span class="cl-status{% if release.published_at %} cl-status-public{% endif %}">
+											<i class="fa {{ release.published_at ? 'fa-check-circle' : 'fa-pencil' }}" aria-hidden="true"></i>
+											{% if release.published_at %}{{ lang('CL_STATUS_PUBLIC') }}{% else %}{{ lang('CL_STATUS_DRAFT') }}{% endif %}
+										</span>
+									</td>
+									<td class="cl-muted cl-col-date">{{ release.date ? release.date|e : "—" }}</td>
+									<td class="cl-col-actions">
+										<div class="cl-actions">
+											<a class="button2" href="{{ release.url|raw }}" aria-label="{{ lang('CL_EDIT_RELEASE_VERSION', release.version)|e }}"><i class="fa fa-pencil" aria-hidden="true"></i> {{ lang('CL_EDIT_RELEASE') }}</a>
+											<a class="button2" href="{{ release.duplicate_url|raw }}" aria-label="{{ lang('CL_DUPLICATE_DRAFT_VERSION', release.version)|e }}"><i class="fa fa-files-o" aria-hidden="true"></i> {{ lang('CL_DUPLICATE_DRAFT') }}</a>
+										</div>
+									</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				{% elseif CL_FILTER_INVALID %}
+					<p id="cl-filter-message" class="cl-empty-inline" role="alert"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{ lang('CL_SEARCH_INVALID') }}</p>
+				{% elseif CL_FILTER_CLEAR_URL %}
+					<p class="cl-empty-inline"><i class="fa fa-search" aria-hidden="true"></i> {{ lang('CL_FILTER_NO_MATCH') }}</p>
+				{% else %}
+					<div class="cl-empty">
+						<i class="fa fa-file-text-o" aria-hidden="true"></i>
+						<p>{{ lang('CL_NO_RELEASES') }}</p>
+						<a class="button1" href="{{ CL_NEW_RELEASE_URL|raw }}"><i class="fa fa-plus" aria-hidden="true"></i> {{ lang('CL_NEW_RELEASE') }}</a>
+					</div>
+				{% endif %}
+				{% if CL_LIST_PREVIOUS or CL_LIST_NEXT %}
+					<div class="cl-actions cl-pager">
+						{% if CL_LIST_PREVIOUS %}<a class="button2" href="{{ CL_LIST_PREVIOUS|raw }}"><i class="fa fa-chevron-left" aria-hidden="true"></i> {{ lang('CL_PREVIOUS_PAGE') }}</a>{% endif %}
+						{% if CL_LIST_NEXT %}<a class="button2" href="{{ CL_LIST_NEXT|raw }}">{{ lang('CL_NEXT_PAGE') }} <i class="fa fa-chevron-right" aria-hidden="true"></i></a>{% endif %}
+					</div>
+				{% endif %}
+			</section>
+
+			{% if CL_PRODUCT_ANNOUNCEMENT %}
+				<details class="cl-card cl-panel">
+					<summary><i class="fa fa-bullhorn" aria-hidden="true"></i> {{ lang('CL_PRODUCT_ANNOUNCEMENT_TITLE') }}</summary>
+					<div class="cl-panel-body">
+						<textarea id="cl-product-announcement" class="cl-code" readonly rows="7" aria-label="{{ lang('CL_PRODUCT_ANNOUNCEMENT_TITLE') }}">{{ CL_PRODUCT_ANNOUNCEMENT|e }}</textarea>
+						<div class="cl-actions cl-form-actions">
+							<button class="button2" id="cl-copy-product" type="button" hidden data-copied="{{ lang('CL_COPIED')|e('html_attr') }}" data-failed="{{ lang('CL_COPY_MANUAL')|e('html_attr') }}"><i class="fa fa-clipboard" aria-hidden="true"></i> {{ lang('CL_PRODUCT_ANNOUNCEMENT_COPY') }}</button>
+							<span id="cl-copy-product-status" role="status"></span>
+						</div>
+					</div>
+				</details>
+			{% endif %}
+
+			{% if CL_HAS_PUBLISHED_RELEASES %}
+				<details class="cl-card cl-panel"{% if CL_HISTORY_EXPORT_OPEN %} open{% endif %}>
+					<summary><i class="fa fa-download" aria-hidden="true"></i> {{ lang('CL_EXPORT_HISTORY') }}</summary>
+					<div class="cl-panel-body">
+						<p class="cl-muted">{{ lang('CL_EXPORT_HISTORY_HELP') }}</p>
+						<form method="post" action="{{ CL_VERSIONS_URL|raw }}">
+							<div class="cl-grid cl-grid-3" aria-describedby="cl-history-export-dates-help">
+								<label for="cl-history-export-from">{{ lang('CL_EXPORT_HISTORY_FROM') }}
+									<input id="cl-history-export-from" type="date" name="export_from" value="{{ CL_HISTORY_EXPORT_FROM|e }}" max="9999-12-31">
+								</label>
+								<label for="cl-history-export-through">{{ lang('CL_EXPORT_HISTORY_THROUGH') }}
+									<input id="cl-history-export-through" type="date" name="export_through" value="{{ CL_HISTORY_EXPORT_THROUGH|e }}" max="9999-12-31">
+								</label>
+								<label for="cl-history-export-locale">{{ lang('CL_BB_LANGUAGE') }}
+									<select id="cl-history-export-locale" name="export_locale">
+										{% for locale in CL_LOCALES %}
+											<option value="{{ locale.iso|e }}"{% if (CL_HISTORY_SELECTED_LOCALE|default(CL_HISTORY_EXPORT_LOCALE)) == locale.iso %} selected{% endif %}>{{ locale.name|e }}</option>
+										{% endfor %}
+									</select>
+								</label>
+							</div>
+							<p id="cl-history-export-dates-help" class="cl-muted">{{ lang('CL_EXPORT_HISTORY_DATES_HELP') }}</p>
+							<div class="cl-actions cl-form-actions">
+								<button class="button1" type="submit" name="operation" value="export_history"><i class="fa fa-file-text-o" aria-hidden="true"></i> {{ lang('CL_EXPORT_MARKDOWN') }}</button>
+								<button class="button2" type="submit" name="operation" value="export_history_bbcode"><i class="fa fa-code" aria-hidden="true"></i> {{ lang('CL_EXPORT_BBCODE') }}</button>
+							</div>
+							{{ S_FORM_TOKEN|raw }}
+						</form>
+					</div>
+				</details>
+			{% endif %}
+
+			<details class="cl-card cl-panel"{% if CL_EDIT_PRODUCT_TITLE is defined %} open{% endif %}>
+				<summary><i class="fa fa-cog" aria-hidden="true"></i> {{ lang('CL_EDIT_PRODUCT') }}</summary>
+				<div class="cl-panel-body">
+					<form method="post" action="{{ CL_ACTION|raw }}">
+						<div class="cl-grid">
+							<label for="cl-edit-title" class="cl-form-wide">{{ lang('CL_TITLE_LABEL') }}
+								<input id="cl-edit-title" name="title" type="text" maxlength="120" value="{{ (CL_EDIT_PRODUCT_TITLE is defined ? CL_EDIT_PRODUCT_TITLE : CL_PRODUCT.title)|e }}" required>
+							</label>
+							<label for="cl-edit-product-download">{{ lang('CL_PRODUCT_DOWNLOAD_LABEL') }}
+								<input id="cl-edit-product-download" name="product_download_url" type="url" maxlength="{{ CL_PRODUCT_LINK_LIMIT|e }}" value="{{ (CL_EDIT_PRODUCT_DOWNLOAD is defined ? CL_EDIT_PRODUCT_DOWNLOAD : CL_PRODUCT.download_url)|e }}">
+							</label>
+							<label for="cl-edit-product-support">{{ lang('CL_PRODUCT_SUPPORT_LABEL') }}
+								<input id="cl-edit-product-support" name="product_support_url" type="url" maxlength="{{ CL_PRODUCT_LINK_LIMIT|e }}" value="{{ (CL_EDIT_PRODUCT_SUPPORT is defined ? CL_EDIT_PRODUCT_SUPPORT : CL_PRODUCT.support_url)|e }}">
+							</label>
+						</div>
+						<div class="cl-actions cl-form-actions">
+							<button class="button1" type="submit" name="operation" value="rename_product"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ lang('CL_SAVE_PRODUCT') }}</button>
+						</div>
+						{{ S_FORM_TOKEN|raw }}
+					</form>
+				</div>
+			</details>
+
+		{% elseif CL_VIEW == 'import' %}
+			<section class="cl-card" aria-labelledby="cl-import-title">
+				<div class="cl-card-header">
+					<h3 id="cl-import-title"><i class="fa fa-file-text-o" aria-hidden="true"></i> {{ lang('CL_IMPORT_MARKDOWN') }}</h3>
+				</div>
+				<p class="cl-muted">{{ lang('CL_IMPORT_MARKDOWN_HELP') }}</p>
+				<form method="post" action="{{ CL_IMPORT_URL|raw }}" enctype="multipart/form-data">
+					<input type="hidden" name="MAX_FILE_SIZE" value="{{ CL_IMPORT_LIMIT|e }}">
+					<div class="cl-grid">
+						<label for="cl-import-version">{{ lang('CL_VERSION') }}
+							<input id="cl-import-version" name="import_version" type="text" maxlength="64" placeholder="1.2.0" value="{{ CL_IMPORT_VERSION|e }}" required>
+						</label>
+						<label for="cl-import-file">{{ lang('CL_IMPORT_MARKDOWN_FILE') }}
+							<input id="cl-import-file" name="changelog_file" type="file" accept=".md,text/markdown" required>
+						</label>
+					</div>
+					<div class="cl-actions cl-form-actions">
+						<button class="button1" type="submit" name="operation" value="import_markdown"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {{ lang('CL_IMPORT_MARKDOWN_ACTION') }}</button>
+					</div>
+					{{ S_FORM_TOKEN|raw }}
+				</form>
+			</section>
+			<details class="cl-card cl-panel"{% if CL_BULK_OPEN %} open{% endif %}>
+				<summary><i class="fa fa-files-o" aria-hidden="true"></i> {{ lang('CL_BULK_TITLE') }}</summary>
+				<div class="cl-panel-body">
+					<p class="cl-muted">{{ lang('CL_BULK_HELP') }}</p>
+					<form method="post" action="{{ CL_IMPORT_URL|raw }}" enctype="multipart/form-data" class="cl-toolbar">
+						<input type="hidden" name="MAX_FILE_SIZE" value="{{ CL_BULK_LIMIT|e }}">
+						<label for="cl-bulk-file" class="cl-toolbar-search">{{ lang('CL_IMPORT_MARKDOWN_FILE') }}
+							<input id="cl-bulk-file" name="bulk_file" type="file" accept=".md,text/markdown" required>
+						</label>
+						<div class="cl-actions">
+							<button class="button1" type="submit" name="operation" value="preview_bulk"><i class="fa fa-search" aria-hidden="true"></i> {{ lang('CL_BULK_PREVIEW') }}</button>
+						</div>
+						{{ S_FORM_TOKEN|raw }}
+					</form>
+					{% if CL_BULK_ENTRIES %}
+						<form method="post" action="{{ CL_IMPORT_URL|raw }}" class="cl-bulk-confirm">
+							<h4>{{ lang('CL_BULK_RESULTS') }}</h4>
+							<p class="cl-muted">{{ lang('CL_BULK_SELECT_HELP') }}</p>
+							<table class="cl-table not-responsive">
+								<tbody>
+									{% for entry in CL_BULK_ENTRIES %}
+										<tr>
+											{% if entry.existing %}
+												<th scope="row"><span class="cl-check cl-check-disabled"><i class="fa fa-ban" aria-hidden="true"></i> {{ entry.version|e }}</span></th>
+												<td class="cl-muted">{{ lang('CL_BULK_EXISTING') }}</td>
+											{% else %}
+												<th scope="row"><label class="cl-check"><input type="checkbox" name="bulk_versions[]" value="{{ entry.key|e }}" checked> {{ entry.version|e }}</label></th>
+												<td class="cl-muted">{{ lang('CL_BULK_COUNT', entry.count) }}</td>
+											{% endif %}
+										</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+							{% if CL_BULK_CAN_CONFIRM %}
+								<input type="hidden" name="bulk_payload" value="{{ CL_BULK_PAYLOAD|e }}">
+								<input type="hidden" name="bulk_expires" value="{{ CL_BULK_EXPIRES|e }}">
+								<input type="hidden" name="bulk_signature" value="{{ CL_BULK_SIGNATURE|e }}">
+								<div class="cl-actions cl-form-actions">
+									<button class="button1" type="submit" name="operation" value="import_bulk"><i class="fa fa-check" aria-hidden="true"></i> {{ lang('CL_BULK_CONFIRM') }}</button>
+								</div>
+								{{ S_FORM_TOKEN|raw }}
+							{% endif %}
+						</form>
+					{% endif %}
+				</div>
+			</details>
+		{% endif %}
+
+		{% if CL_VIEW == 'compare' or CL_COMPARE %}
+			<section class="cl-card" aria-labelledby="cl-compare-title">
+				<div class="cl-card-header">
+					<h3 id="cl-compare-title"><i class="fa fa-file-archive-o" aria-hidden="true"></i> {{ lang('CL_COMPARE_TITLE') }}</h3>
+				</div>
+				{% if not CL_COMPARE %}
+				<form method="post" action="{{ CL_COMPARE_URL|raw }}" enctype="multipart/form-data">
+					<input type="hidden" name="MAX_FILE_SIZE" value="{{ CL_UPLOAD_LIMIT|e }}">
+					<div class="cl-grid cl-compare-files">
+						<label for="cl-old" class="cl-file-box"><span><i class="fa fa-archive" aria-hidden="true"></i> {{ lang('CL_OLD_ZIP') }}</span>
+							<input id="cl-old" name="old_zip" type="file" accept=".zip,application/zip" required>
+						</label>
+						<label for="cl-new" class="cl-file-box"><span><i class="fa fa-archive" aria-hidden="true"></i> {{ lang('CL_NEW_ZIP') }}</span>
+							<input id="cl-new" name="new_zip" type="file" accept=".zip,application/zip" required>
+						</label>
+					</div>
+					<p class="cl-muted">{{ lang('CL_COMPARE_HELP') }}</p>
+					<div class="cl-actions cl-form-actions">
+						<button class="button1" type="submit" name="operation" value="compare"><i class="fa fa-exchange" aria-hidden="true"></i> {{ lang('CL_COMPARE_BUTTON') }}</button>
+					</div>
+					{{ S_FORM_TOKEN|raw }}
+				</form>
+				{% else %}
+					<div class="cl-compare-result">
+						<p class="cl-compare-package"><strong>{{ CL_COMPARE|e }}</strong> <span class="cl-tag">{{ CL_COMPARE_OLD|e }}</span> <i class="fa fa-long-arrow-right" aria-hidden="true"></i> <span class="cl-tag">{{ CL_COMPARE_NEW|e }}</span></p>
+						<ul class="cl-counts">
+							<li class="cl-count-added"><i class="fa fa-plus" aria-hidden="true"></i> {{ lang('CL_ADDED_COUNT', CL_COUNTS.added) }}</li>
+							<li class="cl-count-changed"><i class="fa fa-pencil" aria-hidden="true"></i> {{ lang('CL_CHANGED_COUNT', CL_COUNTS.changed) }}</li>
+							<li class="cl-count-removed"><i class="fa fa-minus" aria-hidden="true"></i> {{ lang('CL_REMOVED_COUNT', CL_COUNTS.removed) }}</li>
+						</ul>
+						{% if CL_PATHS %}
+							<details class="cl-file-details">
+								<summary>{{ lang('CL_FILE_DETAILS') }}</summary>
+								{% if CL_PATH_LIMIT %}<p class="cl-muted">{{ CL_PATH_LIMIT|e }}</p>{% endif %}
+								<ul class="cl-file-list">
+									{% for file in CL_PATHS %}
+										<li class="cl-file-{{ file.status|lower|replace({'cl_file_': ''}) }}"><strong>{{ lang(file.status) }}</strong> <code>{{ file.name|e }}</code></li>
+									{% endfor %}
+								</ul>
+							</details>
+						{% endif %}
+					</div>
+				{% endif %}
+			</section>
+		{% endif %}
+
+		{% if CL_VIEW == 'compare_notes' %}
+			{% INCLUDE '@mundophpbb_changelog/acp_compare_notes.html' %}
+		{% endif %}
+
+		{% if CL_VIEW == 'history' %}
+			<section class="cl-card" aria-labelledby="cl-edit-history-title">
+				<div class="cl-card-header">
+					<h3 id="cl-edit-history-title"><i class="fa fa-clock-o" aria-hidden="true"></i> {{ lang('CL_EDIT_HISTORY') }} <span class="cl-tag">{{ CL_HISTORY_VERSION|e }}</span></h3>
+					<a class="button2" href="{{ CL_HISTORY_EDITOR_URL|raw }}"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{ lang('CL_HISTORY_BACK') }}</a>
+				</div>
+				{% if CL_HISTORY_ENTRIES %}
+					<ol class="cl-timeline">
+						{% for entry in CL_HISTORY_ENTRIES %}
+							<li>
+								<div>
+									<strong>{{ lang('CL_HISTORY_REVISION', entry.source_revision, entry.version)|e }}</strong>
+									<div class="cl-muted">{{ lang('CL_HISTORY_CHANGED', entry.editor_name, entry.date)|e }}</div>
+								</div>
+								<a class="button2" href="{{ entry.restore_url|raw }}"><i class="fa fa-undo" aria-hidden="true"></i> {{ lang('CL_HISTORY_OPEN') }}</a>
+							</li>
+						{% endfor %}
+					</ol>
+				{% else %}
+					<div class="cl-empty">
+						<i class="fa fa-clock-o" aria-hidden="true"></i>
+						<p>{{ lang('CL_HISTORY_NO_EDITS') }}</p>
+					</div>
+				{% endif %}
+				{% if CL_HISTORY_PREVIOUS or CL_HISTORY_NEXT %}
+					<div class="cl-actions cl-pager">
+						{% if CL_HISTORY_PREVIOUS %}<a class="button2" href="{{ CL_HISTORY_PREVIOUS|raw }}"><i class="fa fa-chevron-left" aria-hidden="true"></i> {{ lang('CL_PREVIOUS_PAGE') }}</a>{% endif %}
+						{% if CL_HISTORY_NEXT %}<a class="button2" href="{{ CL_HISTORY_NEXT|raw }}">{{ lang('CL_NEXT_PAGE') }} <i class="fa fa-chevron-right" aria-hidden="true"></i></a>{% endif %}
+					</div>
+				{% endif %}
+			</section>
+		{% endif %}
+
+		{% if CL_EDITOR %}
+			<section id="cl-editor" class="cl-card" aria-labelledby="cl-editor-title">
+				<div class="cl-card-header">
+					<h3 id="cl-editor-title">
+						<i class="fa fa-pencil-square-o" aria-hidden="true"></i> {{ lang('CL_EDITOR_TITLE') }}
+						{% if CL_EDITOR.version %}<span class="cl-tag">{{ CL_EDITOR.version|e }}</span>{% endif %}
+						{% if CL_EDITOR.release_id %}
+							<span class="cl-status{% if CL_EDITOR.published_at %} cl-status-public{% endif %}">
+								<i class="fa {{ CL_EDITOR.published_at ? 'fa-check-circle' : 'fa-pencil' }}" aria-hidden="true"></i>
+								{{ lang(CL_EDITOR.published_at ? 'CL_STATUS_PUBLIC' : 'CL_STATUS_DRAFT') }}
+							</span>
+						{% endif %}
+					</h3>
+					<div class="cl-actions">
+						{% if CL_EDITOR_PUBLIC_URL %}<a class="button2" href="{{ CL_EDITOR_PUBLIC_URL|raw }}"><i class="fa fa-external-link" aria-hidden="true"></i> {{ lang('CL_VIEW_RELEASE') }}</a>{% endif %}
+						{% if CL_EDITOR_HISTORY_URL %}<a class="button2" href="{{ CL_EDITOR_HISTORY_URL|raw }}"><i class="fa fa-clock-o" aria-hidden="true"></i> {{ lang('CL_EDIT_HISTORY') }}</a>{% endif %}
+					</div>
+				</div>
+				<p class="cl-muted">{{ lang('CL_EDITOR_HELP') }}</p>
+				<form method="post" action="{{ CL_EDITOR_ACTION|raw }}#cl-editor" id="cl-editor-form" rel="noopener"
+					data-product="{{ CL_PRODUCT.title|e('html_attr') }}"
+					data-bb-labels="{{ CL_BB_LABELS|e('html_attr') }}">
+					<input type="hidden" name="release_id" value="{{ CL_EDITOR.release_id|e }}">
+					<input type="hidden" name="revision" value="{{ CL_EDITOR.revision|e }}">
+					<div class="cl-grid">
+						<label for="cl-version">{{ lang('CL_VERSION') }}
+							<input id="cl-version" name="version" type="text" maxlength="64" placeholder="1.2.0" value="{{ CL_EDITOR.version|e }}" required>
+						</label>
+						<label for="cl-previous-version">{{ lang('CL_PREVIOUS_VERSION') }}
+							<input id="cl-previous-version" name="previous_version" type="text" maxlength="64" value="{{ CL_EDITOR.previous_version|e }}">
+						</label>
+					</div>
+					{% for link in CL_EDITOR_LINKS %}
+						<input type="hidden" name="{{ link.field|e }}" data-link-max="{{ CL_EDITOR_LINK_MAX|e }}" value="{{ link.url|e }}" data-link-label="{{ link.label|e }}">
+					{% endfor %}
+					{% if CL_LINK_ERROR %}<p class="cl-empty-inline" role="alert"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{ CL_LINK_ERROR|e }}</p>{% endif %}
+					<div class="cl-sections">
+						{% for section in CL_EDITOR_SECTIONS %}
+							<label for="cl-{{ section.field|e }}" class="cl-editor-field cl-section-{{ section.field|e }}">
+								<span class="cl-section-title"><i class="fa {{ section.field == 'features' ? 'fa-star' : (section.field == 'fixes' ? 'fa-bug' : 'fa-wrench') }}" aria-hidden="true"></i> {{ lang(section.heading) }}</span>
+								<textarea id="cl-{{ section.field|e }}" name="{{ section.field|e }}" rows="5" maxlength="{{ CL_NOTES_MAX_LENGTH|e }}" data-heading="{{ section.heading|e }}">{{ section.notes|e }}</textarea>
+							</label>
+						{% endfor %}
+					</div>
+					<div class="cl-actions cl-editor-actions">
+						{% if CL_EDITOR.published_at %}
+							<button class="button1" type="submit" name="operation" value="save"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ lang('CL_SAVE_CHANGES') }}</button>
+							<button class="button2" type="submit" name="operation" value="unpublish"><i class="fa fa-undo" aria-hidden="true"></i> {{ lang('CL_UNPUBLISH') }}</button>
+						{% else %}
+							<button class="button1" type="submit" name="operation" value="publish"><i class="fa fa-check" aria-hidden="true"></i> {{ lang('CL_PUBLISH') }}</button>
+							<button class="button2" type="submit" name="operation" value="save"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ lang('CL_SAVE_DRAFT') }}</button>
+						{% endif %}
+						<button class="button2 cl-push-right" type="submit" formaction="{{ CL_EDITOR_PREVIEW_URL|raw }}" formtarget="_blank"><i class="fa fa-eye" aria-hidden="true"></i> {{ lang('CL_PREVIEW_BUTTON') }}</button>
+					</div>
+					{{ S_FORM_TOKEN|raw }}
+				</form>
+			</section>
+
+			<section class="cl-card cl-bbcode" aria-labelledby="cl-bbcode-title">
+				<div class="cl-card-header">
+					<h3 id="cl-bbcode-title"><i class="fa fa-code" aria-hidden="true"></i> {{ lang('CL_BB_PREVIEW') }}</h3>
+				</div>
+				<p class="cl-muted">{{ lang('CL_BB_HELP') }}</p>
+				<div class="cl-toolbar">
+					<label for="cl-bb-locale">{{ lang('CL_BB_LANGUAGE') }}
+						<select id="cl-bb-locale" name="export_locale" form="cl-editor-form">
+							{% for locale in CL_LOCALES %}
+								<option value="{{ locale.iso|e }}"{% if CL_BB_LOCALE == locale.iso %} selected{% endif %}>{{ locale.name|e }}</option>
+							{% endfor %}
+						</select>
+					</label>
+					<div class="cl-actions">
+						<button type="button" class="button2" id="cl-copy" hidden data-copied="{{ lang('CL_COPIED')|e('html_attr') }}" data-failed="{{ lang('CL_COPY_MANUAL')|e('html_attr') }}"><i class="fa fa-clipboard" aria-hidden="true"></i> {{ lang('CL_COPY') }}</button>
+						<button type="submit" class="button2" name="operation" value="export_bbcode" form="cl-editor-form"><i class="fa fa-code" aria-hidden="true"></i> {{ lang('CL_EXPORT_BBCODE') }}</button>
+						<button type="submit" class="button2" name="operation" value="export_markdown" form="cl-editor-form"><i class="fa fa-file-text-o" aria-hidden="true"></i> {{ lang('CL_EXPORT_MARKDOWN') }}</button>
+						<span id="cl-copy-status" role="status"></span>
+					</div>
+				</div>
+				<textarea id="cl-bbcode" class="cl-code" aria-label="{{ lang('CL_BB_PREVIEW') }}" rows="11" readonly spellcheck="false">{{ CL_BBCODE|e }}</textarea>
+			</section>
+
+			{% if CL_EDITOR.release_id %}
+				<section class="cl-card cl-danger" aria-labelledby="cl-delete-title">
+					<div class="cl-card-header">
+						<h3 id="cl-delete-title"><i class="fa fa-trash-o" aria-hidden="true"></i> {{ lang('CL_DANGER_ZONE') }}</h3>
+					</div>
+					<form method="post" action="{{ CL_EDITOR_ACTION|raw }}" class="cl-danger-body">
+						<p>{{ lang('CL_DELETE_RELEASE_HELP') }}</p>
+						<input type="hidden" name="release_id" value="{{ CL_EDITOR.release_id|e }}">
+						<button class="button2 cl-button-danger" type="submit" name="operation" value="delete_release"><i class="fa fa-trash-o" aria-hidden="true"></i> {{ lang('CL_DELETE_RELEASE_BUTTON') }}</button>
+						{{ S_FORM_TOKEN|raw }}
+					</form>
+				</section>
+			{% endif %}
+		{% endif %}
+	{% endif %}
+</div>
+
+{% INCLUDE 'overall_footer.html' %}

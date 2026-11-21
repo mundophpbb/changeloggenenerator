@@ -1,0 +1,30 @@
+{
+	"name": "mundophpbb/changelog",
+	"type": "phpbb-extension",
+	"description": "Compare phpBB extension ZIPs, edit BBCode release notes and publish a changelog for each product.",
+	"version": "1.17.4",
+	"license": "GPL-2.0-only",
+	"authors": [
+		{
+			"name": "MundophpBB",
+			"homepage": "https://mundophpbb.com.br"
+		}
+	],
+	"require": {
+		"php": ">=7.4",
+		"ext-zip": "*",
+		"composer/installers": "^1.0 || ^2.0"
+	},
+	"extra": {
+		"display-name": "Changelog",
+		"soft-require": {
+			"phpbb/phpbb": ">=3.3.0,<4.0.0@dev"
+		},
+		"version-check": {
+			"host": "mundophpbb.com.br",
+			"directory": "/updates",
+			"filename": "changelog.json",
+			"ssl": true
+		}
+	}
+}

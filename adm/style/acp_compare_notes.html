@@ -1,0 +1,75 @@
+<section class="cl-card" aria-labelledby="cl-notes-compare-title">
+	<div class="cl-card-header">
+		<h3 id="cl-notes-compare-title"><i class="fa fa-exchange" aria-hidden="true"></i> {{ lang('CL_NOTES_COMPARE') }}</h3>
+	</div>
+	<p class="cl-muted">{{ lang('CL_NOTES_COMPARE_HELP') }}</p>
+	<form method="get" action="{{ CL_NOTES_FORM.action|e }}" class="cl-toolbar">
+		{% for name, value in CL_NOTES_FORM.fields %}
+			<input type="hidden" name="{{ name|e }}" value="{{ value|e }}">
+		{% endfor %}
+		<label for="cl-notes-base">{{ lang('CL_NOTES_COMPARE_BASE') }}
+			<input id="cl-notes-base" type="text" name="base_version" list="cl-notes-versions" value="{{ CL_NOTES_BASE|e }}" maxlength="64" required>
+		</label>
+		<span class="cl-toolbar-arrow" aria-hidden="true"><i class="fa fa-long-arrow-right"></i></span>
+		<label for="cl-notes-target">{{ lang('CL_NOTES_COMPARE_TARGET') }}
+			<input id="cl-notes-target" type="text" name="target_version" list="cl-notes-versions" value="{{ CL_NOTES_TARGET|e }}" maxlength="64" required>
+		</label>
+		<datalist id="cl-notes-versions">
+			{% for release in CL_NOTES_SUGGESTIONS %}
+				<option value="{{ release.version|e }}">{{ lang(release.published_at ? 'CL_STATUS_PUBLIC' : 'CL_STATUS_DRAFT') }}</option>
+			{% endfor %}
+		</datalist>
+		<div class="cl-actions">
+			<button type="submit" class="button1"><i class="fa fa-exchange" aria-hidden="true"></i> {{ lang('CL_NOTES_COMPARE_RUN') }}</button>
+		</div>
+	</form>
+</section>
+
+{% if CL_NOTES_COMPARED %}
+	<section class="cl-card cl-notes-diff" aria-labelledby="cl-notes-diff-title">
+		<div class="cl-card-header">
+			<h3 id="cl-notes-diff-title"><span class="cl-tag">{{ CL_NOTES_BEFORE|e }}</span> <i class="fa fa-long-arrow-right" aria-hidden="true"></i> <span class="cl-tag">{{ CL_NOTES_AFTER|e }}</span></h3>
+		</div>
+		{% if not CL_NOTES_DIFF.sections and not CL_NOTES_DIFF.links %}
+			<div class="cl-empty">
+				<i class="fa fa-check-circle" aria-hidden="true"></i>
+				<p>{{ lang('CL_NOTES_COMPARE_EMPTY') }}</p>
+			</div>
+		{% endif %}
+		{% for section in CL_NOTES_DIFF.sections %}
+			<div class="cl-notes-diff-group">
+				<h4>{{ lang(section.label) }}</h4>
+				{% if section.reordered %}
+					<p class="cl-muted"><i class="fa fa-sort" aria-hidden="true"></i> {{ lang('CL_NOTES_COMPARE_REORDERED') }}</p>
+				{% else %}
+					<div class="cl-grid">
+						{% if section.removed %}
+							<div class="cl-diff-removed">
+								<strong><i class="fa fa-minus-circle" aria-hidden="true"></i> {{ lang('CL_NOTES_COMPARE_REMOVED') }}</strong>
+								<ul>{% for item in section.removed %}<li>{{ item|e }}</li>{% endfor %}</ul>
+							</div>
+						{% endif %}
+						{% if section.added %}
+							<div class="cl-diff-added">
+								<strong><i class="fa fa-plus-circle" aria-hidden="true"></i> {{ lang('CL_NOTES_COMPARE_ADDED') }}</strong>
+								<ul>{% for item in section.added %}<li>{{ item|e }}</li>{% endfor %}</ul>
+							</div>
+						{% endif %}
+					</div>
+				{% endif %}
+			</div>
+		{% endfor %}
+		{% if CL_NOTES_DIFF.links %}
+			<div class="cl-notes-diff-group">
+				<h4>{{ lang('CL_NOTES_COMPARE_LINKS') }}</h4>
+				{% for link in CL_NOTES_DIFF.links %}
+					<strong>{{ lang(link.label) }}</strong>
+					<dl class="cl-grid">
+						<div class="cl-diff-removed"><dt>{{ lang('CL_NOTES_COMPARE_BEFORE') }}</dt><dd>{{ link.before ? link.before|e : lang('CL_NOTES_COMPARE_NO_LINK') }}</dd></div>
+						<div class="cl-diff-added"><dt>{{ lang('CL_NOTES_COMPARE_AFTER') }}</dt><dd>{{ link.after ? link.after|e : lang('CL_NOTES_COMPARE_NO_LINK') }}</dd></div>
+					</dl>
+				{% endfor %}
+			</div>
+		{% endif %}
+	</section>
+{% endif %}

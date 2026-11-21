@@ -1,0 +1,166 @@
+{% INCLUDE 'overall_header.html' %}
+{% INCLUDECSS '@mundophpbb_changelog/changelog.css' %}
+
+<div class="mphpbb-cl-public">
+	{% if CL_PREVIEW %}
+		<p class="cl-preview-banner" role="status"><i class="icon fa-eye fa-fw" aria-hidden="true"></i> {{ lang('CL_PREVIEW_NOTICE') }}</p>
+	{% endif %}
+
+	{% if CL_INDEX_URL %}
+		{# ------------------------------------------------ product page and single release #}
+		<header class="cl-public-header">
+			<div class="cl-heading">
+				<span class="cl-initial" aria-hidden="true">{{ CL_PRODUCT_SUMMARY.initial|e }}</span>
+				<div class="cl-heading-text">
+					{% if CL_PRODUCT_URL %}
+						<a class="cl-back" href="{{ CL_PRODUCT_URL|raw }}"><i class="icon fa-angle-left fa-fw" aria-hidden="true"></i>{{ lang('CL_HISTORY') }}</a>
+					{% elseif not CL_PREVIEW %}
+						<a class="cl-back" href="{{ CL_INDEX_URL|raw }}"><i class="icon fa-angle-left fa-fw" aria-hidden="true"></i>{{ lang('CL_PUBLIC_INDEX') }}</a>
+					{% endif %}
+					<h2>{{ CL_PRODUCT_SUMMARY.title|e }}</h2>
+					{% if CL_HISTORY_URL %}<p>{{ lang('CL_HISTORY') }}</p>{% endif %}
+				</div>
+				{% if CL_PRODUCT_LINKS %}
+					<ul class="cl-links">
+						{% for link in CL_PRODUCT_LINKS %}
+							<li><a class="cl-button{% if link.label == 'CL_PRODUCT_DOWNLOAD_OPEN' %} cl-button-primary{% endif %}" href="{{ link.url|e }}">
+								<i class="icon {{ link.label == 'CL_PRODUCT_DOWNLOAD_OPEN' ? 'fa-download' : 'fa-life-ring' }} fa-fw" aria-hidden="true"></i>{{ lang(link.label) }}
+							</a></li>
+						{% endfor %}
+					</ul>
+				{% endif %}
+			</div>
+			{% if CL_PRODUCT_SUMMARY.published %}
+				<dl class="cl-stats">
+					<div><dt>{{ lang('CL_STAT_PUBLISHED') }}</dt><dd>{{ CL_PRODUCT_SUMMARY.published }}</dd></div>
+					<div><dt>{{ lang('CL_STAT_LATEST') }}</dt><dd>{{ CL_PRODUCT_SUMMARY.latest_version|e }}</dd></div>
+					<div><dt>{{ lang('CL_STAT_LAST_PUBLISHED') }}</dt><dd class="cl-stat-text">{{ CL_PRODUCT_SUMMARY.latest_date|e }}</dd></div>
+				</dl>
+			{% endif %}
+		</header>
+
+		{% if CL_HISTORY_URL %}
+			<form class="cl-toolbar" method="get" action="{{ CL_SEARCH_ACTION|e }}" role="search">
+				<label for="cl-search-version">{{ lang('CL_SEARCH_VERSION') }}</label>
+				<div class="cl-search-fields">
+					<span class="cl-search-box">
+						<i class="icon fa-search fa-fw" aria-hidden="true"></i>
+						<input type="search" class="inputbox" id="cl-search-version" name="version" value="{{ CL_SEARCH_VERSION|e }}" maxlength="64"{% if CL_SEARCH_INVALID %} aria-invalid="true" aria-describedby="cl-search-message"{% endif %}>
+					</span>
+					{% if CL_SEARCH_SID %}<input type="hidden" name="sid" value="{{ CL_SEARCH_SID|e }}">{% endif %}
+					<button class="cl-button cl-button-primary" type="submit">{{ lang('CL_SEARCH_SUBMIT') }}</button>
+					{% if CL_SEARCH_VERSION is not same as('') %}<a class="cl-button cl-button-quiet" href="{{ CL_HISTORY_URL|raw }}"><i class="icon fa-times fa-fw" aria-hidden="true"></i>{{ lang('CL_SEARCH_CLEAR') }}</a>{% endif %}
+				</div>
+			</form>
+			{% if not CL_RELEASES %}
+				<div id="cl-search-message" class="cl-empty"{% if CL_SEARCH_INVALID %} role="alert"{% endif %}>
+					<i class="icon fa-search" aria-hidden="true"></i>
+					<p>{{ lang(CL_SEARCH_INVALID ? 'CL_SEARCH_INVALID' : 'CL_SEARCH_EMPTY') }}</p>
+				</div>
+			{% endif %}
+		{% endif %}
+
+		{% if CL_RELEASES %}
+			<ol class="cl-timeline">
+				{% for release in CL_RELEASES %}
+					<li>
+						<article class="cl-release{% if CL_LATEST_RELEASE_ID and release.release_id == CL_LATEST_RELEASE_ID %} cl-release-latest{% endif %}">
+							<header>
+								<h3>
+									<i class="icon fa-tag fa-fw" aria-hidden="true"></i>
+									{% if release.url %}<a href="{{ release.url|raw }}">{{ release.version|e }}</a>{% else %}{{ release.version|e }}{% endif %}
+									{% if CL_LATEST_RELEASE_ID and release.release_id == CL_LATEST_RELEASE_ID %}<span class="cl-badge">{{ lang('CL_PUBLIC_LATEST') }}</span>{% endif %}
+								</h3>
+								{% if release.date %}<time datetime="{{ release.date_iso|e }}"><i class="icon fa-clock-o fa-fw" aria-hidden="true"></i>{{ release.date|e }}</time>{% endif %}
+							</header>
+							{% for section in release.sections %}
+								<section class="cl-section cl-section-{{ section.heading|lower|replace({'cl_': ''}) }}">
+									<h4><i class="icon {{ section.heading == 'CL_FEATURES' ? 'fa-star' : (section.heading == 'CL_FIXES' ? 'fa-bug' : 'fa-wrench') }} fa-fw" aria-hidden="true"></i>{{ lang(section.heading) }}</h4>
+									<ul>
+										{% for item in section.items %}<li>{{ item|e }}</li>{% endfor %}
+									</ul>
+								</section>
+							{% endfor %}
+							{% if release.links %}
+								<ul class="cl-links">
+									{% for link in release.links %}
+										<li><a class="cl-button" href="{{ link.url|e }}"><i class="icon {{ link.label == 'CL_LINK_DOWNLOAD' ? 'fa-download' : 'fa-life-ring' }} fa-fw" aria-hidden="true"></i>{{ lang(link.label) }}</a></li>
+									{% endfor %}
+								</ul>
+							{% endif %}
+						</article>
+					</li>
+				{% endfor %}
+			</ol>
+		{% elseif not CL_HISTORY_URL %}
+			<div class="cl-empty">
+				<i class="icon fa-file-text-o" aria-hidden="true"></i>
+				<p>{{ lang('CL_PUBLIC_NO_RELEASES_YET') }}</p>
+			</div>
+		{% endif %}
+	{% else %}
+		{# ------------------------------------------------ catalogue #}
+		<header class="cl-public-header">
+			<div class="cl-heading">
+				<span class="cl-initial cl-initial-icon" aria-hidden="true"><i class="icon fa-history"></i></span>
+				<div class="cl-heading-text">
+					<h2>{{ CL_TITLE|e }}</h2>
+					<p>{{ lang('CL_PUBLIC_PRODUCT_COUNT', CL_CATALOGUE_TOTAL) }}</p>
+				</div>
+			</div>
+		</header>
+
+		<form class="cl-toolbar" method="get" action="{{ CL_CATALOGUE_ACTION|e }}" role="search">
+			<label for="cl-catalogue-search">{{ lang('CL_SEARCH_PRODUCT') }}</label>
+			<div class="cl-search-fields">
+				<span class="cl-search-box">
+					<i class="icon fa-search fa-fw" aria-hidden="true"></i>
+					<input type="search" class="inputbox" id="cl-catalogue-search" name="q" value="{{ CL_CATALOGUE_SEARCH|e }}" maxlength="120">
+				</span>
+				{% if CL_CATALOGUE_SID %}<input type="hidden" name="sid" value="{{ CL_CATALOGUE_SID|e }}">{% endif %}
+				<button class="cl-button cl-button-primary" type="submit">{{ lang('CL_SEARCH_SUBMIT') }}</button>
+				{% if CL_CATALOGUE_SEARCH is not same as('') %}<a class="cl-button cl-button-quiet" href="{{ CL_CATALOGUE_URL|raw }}"><i class="icon fa-times fa-fw" aria-hidden="true"></i>{{ lang('CL_SEARCH_CLEAR') }}</a>{% endif %}
+			</div>
+		</form>
+
+		{% if CL_PRODUCTS %}
+			<ul class="cl-public-products">
+				{% for product in CL_PRODUCTS %}
+					<li>
+						<a href="{{ product.url|raw }}">
+							<span class="cl-initial" aria-hidden="true">{{ product.initial|e }}</span>
+							<span class="cl-product-text">
+								<strong>{{ product.title|e }}</strong>
+								{% if product.latest_version %}
+									<span class="cl-product-meta">
+										<span class="cl-tag"><i class="icon fa-tag fa-fw" aria-hidden="true"></i>{{ product.latest_version|e }}</span>
+										<span>{{ lang('CL_PUBLIC_RELEASE_COUNT', product.published) }}</span>
+									</span>
+									<span class="cl-product-date"><i class="icon fa-clock-o fa-fw" aria-hidden="true"></i>{{ lang('CL_PUBLIC_UPDATED', product.latest_date) }}</span>
+								{% else %}
+									<span class="cl-product-meta">{{ lang('CL_PUBLIC_NO_RELEASES_YET') }}</span>
+								{% endif %}
+							</span>
+							<i class="icon fa-angle-right cl-product-arrow" aria-hidden="true"></i>
+						</a>
+					</li>
+				{% endfor %}
+			</ul>
+		{% else %}
+			<div class="cl-empty">
+				<i class="icon {{ CL_CATALOGUE_SEARCH is not same as('') ? 'fa-search' : 'fa-cubes' }}" aria-hidden="true"></i>
+				<p>{{ lang(CL_CATALOGUE_SEARCH is not same as('') ? 'CL_NO_MATCHING_PRODUCTS' : 'CL_NO_PUBLIC_PRODUCTS') }}</p>
+			</div>
+		{% endif %}
+	{% endif %}
+
+	{% if CL_PREVIOUS_URL or CL_NEXT_URL %}
+		<nav class="cl-pagination" aria-label="{{ lang(CL_CATALOGUE_URL ? 'CL_CATALOGUE_PAGINATION' : 'CL_PAGINATION') }}">
+			{% if CL_PREVIOUS_URL %}<a class="cl-button" href="{{ CL_PREVIOUS_URL|raw }}" rel="prev"><i class="icon fa-chevron-left fa-fw" aria-hidden="true"></i>{{ lang('CL_PREVIOUS_PAGE') }}</a>{% endif %}
+			{% if CL_CATALOGUE_URL %}<span>{{ lang('CL_CATALOGUE_PAGE_COUNT', CL_CATALOGUE_PAGE, CL_CATALOGUE_LAST_PAGE) }}</span>{% endif %}
+			{% if CL_NEXT_URL %}<a class="cl-button" href="{{ CL_NEXT_URL|raw }}" rel="next">{{ lang('CL_NEXT_PAGE') }}<i class="icon fa-chevron-right fa-fw" aria-hidden="true"></i></a>{% endif %}
+		</nav>
+	{% endif %}
+</div>
+
+{% INCLUDE 'overall_footer.html' %}

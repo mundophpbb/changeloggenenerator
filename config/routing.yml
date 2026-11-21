@@ -1,0 +1,22 @@
+mundophpbb_changelog_index:
+    path: /changelog
+    defaults: { _controller: 'mundophpbb.changelog.public:index' }
+    methods: [GET]
+
+mundophpbb_changelog_product:
+    path: /changelog/{slug}/{page}
+    defaults: { _controller: 'mundophpbb.changelog.public:product', page: 1 }
+    requirements: { slug: '[a-z0-9][a-z0-9-]{0,79}', page: '[1-9][0-9]{0,5}' }
+    methods: [GET]
+
+mundophpbb_changelog_release:
+    path: /changelog/{slug}/release/{release_id}
+    defaults: { _controller: 'mundophpbb.changelog.public:release' }
+    requirements: { slug: '[a-z0-9][a-z0-9-]{0,79}', release_id: '[1-9][0-9]{0,9}' }
+    methods: [GET]
+
+mundophpbb_changelog_preview:
+    path: /changelog/{slug}/preview
+    defaults: { _controller: 'mundophpbb.changelog.public:preview' }
+    requirements: { slug: '[a-z0-9][a-z0-9-]{0,79}' }
+    methods: [POST]

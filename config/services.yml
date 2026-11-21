@@ -1,0 +1,77 @@
+services:
+    mundophpbb.changelog.repository:
+        class: mundophpbb\changelog\service\repository
+        arguments:
+            - '@dbal.conn'
+            - '%core.table_prefix%'
+
+    mundophpbb.changelog.comparator:
+        class: mundophpbb\changelog\service\zip_comparator
+
+    mundophpbb.changelog.translations:
+        class: mundophpbb\changelog\service\translations
+        arguments:
+            - '@language.loader'
+            - '@ext.manager'
+
+    mundophpbb.changelog.exporter:
+        class: mundophpbb\changelog\service\exporter
+
+    mundophpbb.changelog.bulk_import:
+        class: mundophpbb\changelog\service\bulk_import
+        arguments:
+            - '@mundophpbb.changelog.repository'
+
+    mundophpbb.changelog.admin_views:
+        class: mundophpbb\changelog\controller\admin_views
+        arguments:
+            - '@request'
+            - '@template'
+            - '@language'
+            - '@controller.helper'
+            - '@mundophpbb.changelog.repository'
+            - '@mundophpbb.changelog.translations'
+            - '@config'
+            - '@user'
+
+    mundophpbb.changelog.admin:
+        class: mundophpbb\changelog\controller\admin_controller
+        arguments:
+            - '@request'
+            - '@template'
+            - '@language'
+            - '@mundophpbb.changelog.admin_views'
+            - '@mundophpbb.changelog.repository'
+            - '@mundophpbb.changelog.comparator'
+            - '@mundophpbb.changelog.translations'
+            - '@mundophpbb.changelog.exporter'
+            - '@mundophpbb.changelog.bulk_import'
+            - '@config'
+            - '@user'
+            - '@log'
+
+    mundophpbb.changelog.public:
+        class: mundophpbb\changelog\controller\public_controller
+        arguments:
+            - '@template'
+            - '@language'
+            - '@user'
+            - '@controller.helper'
+            - '@mundophpbb.changelog.repository'
+            - '@request'
+            - '@auth'
+
+    mundophpbb.changelog.navigation:
+        class: mundophpbb\changelog\event\navigation_listener
+        arguments:
+            - '@config'
+            - '@controller.helper'
+            - '@language'
+            - '@template'
+        tags:
+            - { name: event.listener }
+
+    mundophpbb.changelog.permissions:
+        class: mundophpbb\changelog\event\permissions_listener
+        tags:
+            - { name: event.listener }
