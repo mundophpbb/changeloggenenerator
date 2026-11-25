@@ -1,10 +1,20 @@
 # Changelog
 
+## [1.17.5]
+
+### Added
+
+- Delete a product from its settings in the ACP. The standard phpBB confirmation page is shown first; the product, all of its releases and their edit history are removed in a single transaction, its public page stops working and the action is recorded in the admin log.
+
 ## [1.17.4]
 
 ### Added
 
 - Delete a saved or published release from the editor. The standard phpBB confirmation page is shown first; the release, its notes and its edit history are removed, it disappears from the public changelog and the action is recorded in the admin log.
+
+### Fixed
+
+- Compare notes: added a "Clear comparison" button that resets both versions and the result, which previously stayed stuck in the URL and form.
 
 ## [1.17.3]
 

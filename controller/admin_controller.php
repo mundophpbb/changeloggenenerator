@@ -106,6 +106,11 @@ class admin_controller
 			{
 				return $this->delete_release($product);
 			}
+			if ($product && $this->post('operation') === 'delete_product')
+			{
+				$this->delete_product($product);
+				return null;
+			}
 			if (!check_form_key(self::FORM))
 			{
 				$this->error('FORM_INVALID');
@@ -570,6 +575,41 @@ class admin_controller
 			'release_id' => $id,
 		]));
 		return $release;
+	}
+
+	/**
+	 * Deletes a product, its releases and their edit history after the
+	 * standard phpBB confirmation page, following the same flow as delete_release().
+	 */
+	private function delete_product(array $product)
+	{
+		if ($this->request->is_set_post('cancel'))
+		{
+			return;
+		}
+
+		if (confirm_box(true))
+		{
+			if (!$this->repository->delete_product($product['product_id']))
+			{
+				$this->error('CL_ERR_DELETE_PRODUCT');
+				return;
+			}
+
+			$this->log->add('admin', (int) $this->user->data['user_id'], $this->user->ip, 'LOG_CL_PRODUCT_DELETED', false,
+				[$product['title']]);
+			redirect($this->urls->url(0, null, 1, 'product_deleted'));
+			return;
+		}
+		if ($this->request->is_set_post('confirm') || !check_form_key(self::FORM))
+		{
+			$this->error('FORM_INVALID');
+			return;
+		}
+
+		confirm_box(false, ['CL_DELETE_PRODUCT', $product['title']], build_hidden_fields([
+			'operation' => 'delete_product',
+		]));
 	}
 
 	private function export_history(array $product, $bbcode)

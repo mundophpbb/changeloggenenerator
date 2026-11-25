@@ -294,6 +294,58 @@ class repository
 		}
 	}
 
+	/**
+	 * Deletes a product with all of its releases and their edit history.
+	 * Returns false when the product no longer exists or a query fails.
+	 */
+	public function delete_product($product_id)
+	{
+		$product_id = (int) $product_id;
+		$this->db->sql_return_on_error(true);
+		try
+		{
+			if (!$this->db->sql_transaction('begin'))
+			{
+				return false;
+			}
+
+			$result = $this->db->sql_query('SELECT release_id FROM ' . $this->releases . ' WHERE product_id = ' . $product_id);
+			if ($result === false)
+			{
+				$this->db->sql_transaction('rollback');
+				return false;
+			}
+			$release_ids = array_map('intval', array_column((array) $this->rows($result), 'release_id'));
+
+			foreach (array_chunk($release_ids, 500) as $chunk)
+			{
+				if ($this->db->sql_query('DELETE FROM ' . $this->history . ' WHERE ' . $this->db->sql_in_set('release_id', $chunk)) === false)
+				{
+					$this->db->sql_transaction('rollback');
+					return false;
+				}
+			}
+			if ($this->db->sql_query('DELETE FROM ' . $this->releases . ' WHERE product_id = ' . $product_id) === false
+				|| $this->db->sql_query('DELETE FROM ' . $this->products . ' WHERE product_id = ' . $product_id) === false
+				|| (int) $this->db->sql_affectedrows() !== 1)
+			{
+				$this->db->sql_transaction('rollback');
+				return false;
+			}
+
+			return (bool) $this->db->sql_transaction('commit');
+		}
+		catch (\Throwable $error)
+		{
+			$this->db->sql_transaction('rollback');
+			throw $error;
+		}
+		finally
+		{
+			$this->db->sql_return_on_error(false);
+		}
+	}
+
 	public function save_release(array $data, $product_id, $existing, array $editor)
 	{
 		if (!$existing)

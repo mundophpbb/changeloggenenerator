@@ -21,6 +21,7 @@
 		</datalist>
 		<div class="cl-actions">
 			<button type="submit" class="button1"><i class="fa fa-exchange" aria-hidden="true"></i> {{ lang('CL_NOTES_COMPARE_RUN') }}</button>
+			{% if CL_NOTES_RESET_URL %}<a class="cl-quiet-button" href="{{ CL_NOTES_RESET_URL|raw }}"><i class="fa fa-times" aria-hidden="true"></i> {{ lang('CL_NOTES_COMPARE_RESET') }}</a>{% endif %}
 		</div>
 	</form>
 </section>

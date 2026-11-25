@@ -289,6 +289,17 @@
 				</div>
 			</details>
 
+			<section class="cl-card cl-danger" aria-labelledby="cl-delete-product-title">
+				<div class="cl-card-header">
+					<h3 id="cl-delete-product-title"><i class="fa fa-trash-o" aria-hidden="true"></i> {{ lang('CL_DANGER_ZONE_PRODUCT') }}</h3>
+				</div>
+				<form method="post" action="{{ CL_ACTION|raw }}" class="cl-danger-body">
+					<p>{{ lang('CL_DELETE_PRODUCT_HELP', CL_PRODUCT_SUMMARY.published + CL_PRODUCT_SUMMARY.drafts) }}</p>
+					<button class="button2 cl-button-danger" type="submit" name="operation" value="delete_product"><i class="fa fa-trash-o" aria-hidden="true"></i> {{ lang('CL_DELETE_PRODUCT_BUTTON') }}</button>
+					{{ S_FORM_TOKEN|raw }}
+				</form>
+			</section>
+
 		{% elseif CL_VIEW == 'import' %}
 			<section class="cl-card" aria-labelledby="cl-import-title">
 				<div class="cl-card-header">

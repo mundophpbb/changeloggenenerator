@@ -56,6 +56,11 @@ class admin_views
 		{
 			$this->template->assign_var('CL_NOTICE', $this->language->lang('CL_NAV_SAVED'));
 		}
+		if (!$product && $this->request->variable('notice', '', false, request_interface::GET) === 'product_deleted'
+			&& !$this->request->is_set_post('operation'))
+		{
+			$this->template->assign_var('CL_NOTICE', $this->language->lang('CL_PRODUCT_DELETED'));
+		}
 
 		$products = $product ? [] : $this->repository->products();
 		$stats = $products ? $this->repository->product_stats() : [];
@@ -195,6 +200,7 @@ class admin_views
 			'CL_NOTES_FORM' => $form,
 			'CL_NOTES_BASE' => substr($base, 0, 64),
 			'CL_NOTES_TARGET' => substr($target, 0, 64),
+			'CL_NOTES_RESET_URL' => ($base !== '' || $target !== '') ? $urls->url($product_id, null, $urls->page(), '', 'compare_notes') : '',
 			'CL_NOTES_SUGGESTIONS' => $this->repository->saved_releases($product_id, '', 'all', 50, 0),
 		]);
 		if ($base === '' && $target === '')
